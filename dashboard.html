@@ -17,7 +17,7 @@
   --purple:#6c3483;--purple-l:#f5eef8;
   --border:#dde1e7;--white:#fff;
   --text:#1a252f;--text-m:#5d6d7e;--text-l:#aab7b8;
-  --gray-l:#f4f6f7;--sidebar:220px;
+  --gray-l:#f4f6f7;
   --radius:12px;--radius-s:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -44,14 +44,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f3f7;color:var(--t
 
 /* TOP NAV */
 .topnav{background:var(--blue);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.topnav-left{display:flex;align-items:center;gap:12px}
 .topnav-logo{font-size:15px;font-weight:700;letter-spacing:-.3px}
 .topnav-sub{font-size:11px;opacity:.65}
 .topnav-right{display:flex;align-items:center;gap:16px}
 .topnav-admin{font-size:13px;opacity:.8}
 .btn-logout-top{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
 
-/* MAIN CONTENT */
+/* MAIN */
 .main{flex:1;padding:24px;overflow-y:auto}
 
 /* FILTER BAR */
@@ -81,16 +80,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f3f7;color:var(--t
 .kpi-card.red .kpi-value{color:var(--red)}
 .kpi-card.purple .kpi-value{color:var(--purple)}
 
-/* CHARTS ROW */
+/* Clickable card */
+.kpi-card.clickable{cursor:pointer;transition:box-shadow .15s,transform .1s}
+.kpi-card.clickable:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
+.kpi-badge-hint{position:absolute;top:10px;right:10px;font-size:10px;color:var(--red);background:var(--red-l);padding:2px 8px;border-radius:20px;border:1px solid #f5b7b1}
+
+/* CHARTS */
 .charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:768px){.charts-row{grid-template-columns:1fr}}
 .chart-card{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border)}
-.chart-title{font-size:13px;font-weight:600;color:var(--text-m);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+.chart-title{font-size:11px;font-weight:600;color:var(--text-m);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
 
 /* TABLE */
 .table-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
 .table-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
-.table-title{font-size:13px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
+.table-title{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
 .table-count{font-size:12px;color:var(--text-l)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
@@ -105,12 +109,28 @@ tbody tr:last-child td{border:none}
 .badge.absen{background:var(--red-l);color:var(--red)}
 .mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 
-/* LOADING */
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.show{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius);width:100%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head-title{font-size:15px;font-weight:700}
+.modal-head-sub{font-size:12px;color:var(--text-m);margin-top:2px}
+.btn-modal-close{background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-m)}
+.modal-filter{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;background:var(--gray-l)}
+.modal-filter-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.modal-tag{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text-m)}
+.modal-count{background:var(--red-l);color:var(--red);border:1px solid #f5b7b1;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600;white-space:nowrap}
+.modal-body{overflow-y:auto;flex:1}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-foot-info{font-size:12px;color:var(--text-l)}
+.btn-export-modal{padding:7px 16px;border-radius:var(--radius-s);border:1.5px solid var(--green);background:transparent;color:var(--green);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* LOADING / EMPTY */
 .loading{text-align:center;padding:40px;color:var(--text-l)}
 .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* EMPTY */
 .empty{text-align:center;padding:40px;color:var(--text-l)}
 .empty-icon{font-size:32px;margin-bottom:8px}
 
@@ -143,13 +163,10 @@ tbody tr:last-child td{border:none}
 
 <!-- APP -->
 <div class="app" id="appWrap">
-  <!-- TOP NAV -->
   <div class="topnav">
-    <div class="topnav-left">
-      <div>
-        <div class="topnav-logo">Absensi HOA — Dashboard Admin</div>
-        <div class="topnav-sub">Monitoring Kehadiran Salesman</div>
-      </div>
+    <div>
+      <div class="topnav-logo">Absensi HOA — Dashboard Admin</div>
+      <div class="topnav-sub">Monitoring Kehadiran Salesman</div>
     </div>
     <div class="topnav-right">
       <div class="topnav-admin" id="adminName">Administrator</div>
@@ -157,7 +174,6 @@ tbody tr:last-child td{border:none}
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
 
     <!-- FILTER BAR -->
@@ -172,21 +188,15 @@ tbody tr:last-child td{border:none}
       </div>
       <div class="filter-group">
         <div class="filter-label">Region</div>
-        <select class="filter-select" id="fRegion">
-          <option value="">Semua Region</option>
-        </select>
+        <select class="filter-select" id="fRegion"><option value="">Semua Region</option></select>
       </div>
       <div class="filter-group">
         <div class="filter-label">Entity</div>
-        <select class="filter-select" id="fEntity">
-          <option value="">Semua Entity</option>
-        </select>
+        <select class="filter-select" id="fEntity"><option value="">Semua Entity</option></select>
       </div>
       <div class="filter-group">
         <div class="filter-label">Branch</div>
-        <select class="filter-select" id="fBranch">
-          <option value="">Semua Branch</option>
-        </select>
+        <select class="filter-select" id="fBranch"><option value="">Semua Branch</option></select>
       </div>
       <button class="btn-filter" onclick="applyFilter()">Tampilkan</button>
       <button class="btn-export" onclick="exportExcel()">Download Excel</button>
@@ -209,7 +219,8 @@ tbody tr:last-child td{border:none}
         <div class="kpi-value" id="kIzin">—</div>
         <div class="kpi-sub">Izin/Sakit/Cuti</div>
       </div>
-      <div class="kpi-card red">
+      <div class="kpi-card red clickable" id="cardTidakHadir" onclick="openModalBelumAbsen()">
+        <div class="kpi-badge-hint">Klik untuk detail</div>
         <div class="kpi-label">Tidak Hadir</div>
         <div class="kpi-value" id="kAbsen">—</div>
         <div class="kpi-sub">Tanpa keterangan</div>
@@ -247,14 +258,42 @@ tbody tr:last-child td{border:none}
   </div>
 </div>
 
+<!-- MODAL BELUM ABSEN -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalOnBackdrop(event)">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <div class="modal-head-title">Daftar Belum Absen</div>
+        <div class="modal-head-sub" id="modalSubTitle">Salesman tanpa keterangan pada periode filter</div>
+      </div>
+      <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
+    </div>
+    <div class="modal-filter">
+      <div class="modal-filter-tags" id="modalFilterTags"></div>
+      <div class="modal-count" id="modalCount">0 data</div>
+    </div>
+    <div class="modal-body" id="modalTableBody">
+      <div class="loading"><div class="spinner"></div>Memuat...</div>
+    </div>
+    <div class="modal-foot">
+      <div class="modal-foot-info" id="modalFootInfo">—</div>
+      <button class="btn-export-modal" onclick="exportExcelBelumAbsen()">Download Excel</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbyNCXKkwycOI0RJxh7DqCqRb5AZrs0a-_WGaxif_HZyofzMAPJh2UY4P2_GdqDpdnjcSw/exec';
-let adminUser = null;
-let allData   = [];
-let allIzin   = [];
-let allMaster = [];
-let chartTren = null;
+const API_URL = 'https://script.google.com/macros/s/AKfycbx3E4OUBIxMdwo6yDlhml8bZNzG0ix1rnKyaAThsOQBSvcpVFzZ8lQ0EOsIUQj3kuUPDg/exec';
+let adminUser  = null;
+let allData    = [];
+let allIzin    = [];
+let allMaster  = [];
+let chartTren  = null;
 let chartStatus = null;
+
+// data hasil filter terakhir — dipakai modal
+let lastFilter = { tglMulai:'', tglAkhir:'', region:'', entity:'', branch:'' };
+let belumAbsenData = []; // untuk export excel modal
 
 // ---- INIT ----
 window.addEventListener('load', () => {
@@ -268,10 +307,8 @@ function setDefaultDates() {
   const y     = now.getFullYear();
   const m     = String(now.getMonth()+1).padStart(2,'0');
   const d     = String(now.getDate()).padStart(2,'0');
-  const first = y+'-'+m+'-01';
-  const today = y+'-'+m+'-'+d;
-  document.getElementById('fTglMulai').value = first;
-  document.getElementById('fTglAkhir').value = today;
+  document.getElementById('fTglMulai').value = y+'-'+m+'-01';
+  document.getElementById('fTglAkhir').value = y+'-'+m+'-'+d;
 }
 
 // ---- LOGIN ----
@@ -281,20 +318,15 @@ async function doLogin() {
   const err  = document.getElementById('loginErr');
   err.classList.remove('show');
   if (!user||!pass) { showErr('Lengkapi username dan password'); return; }
-
   try {
-    const res = await fetch(API_URL+'?action=adminlogin&username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass));
+    const res  = await fetch(API_URL+'?action=adminlogin&username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass));
     const data = await res.json();
     if (data.status === 'ok') {
       adminUser = data.admin;
       localStorage.setItem('hoa_admin', JSON.stringify(adminUser));
       showApp();
-    } else {
-      showErr(data.message || 'Username atau password salah');
-    }
-  } catch(e) {
-    showErr('Gagal terhubung ke server');
-  }
+    } else { showErr(data.message || 'Username atau password salah'); }
+  } catch(e) { showErr('Gagal terhubung ke server'); }
 }
 
 function showErr(msg) {
@@ -336,17 +368,15 @@ function populateFilters() {
   const regions  = [...new Set(allMaster.map(r=>r.region).filter(Boolean))].sort();
   const entities = [...new Set(allMaster.map(r=>r.entity).filter(Boolean))].sort();
   const branches = [...new Set(allMaster.map(r=>r.branch).filter(Boolean))].sort();
-
   const fR = document.getElementById('fRegion');
   const fE = document.getElementById('fEntity');
   const fB = document.getElementById('fBranch');
-
   regions.forEach(r  => { const o=document.createElement('option'); o.value=r; o.textContent=r; fR.appendChild(o); });
   entities.forEach(e => { const o=document.createElement('option'); o.value=e; o.textContent=e; fE.appendChild(o); });
   branches.forEach(b => { const o=document.createElement('option'); o.value=b; o.textContent=b; fB.appendChild(o); });
 }
 
-// ---- FILTER & RENDER ----
+// ---- FILTER ----
 function applyFilter() {
   const tglMulai = document.getElementById('fTglMulai').value;
   const tglAkhir = document.getElementById('fTglAkhir').value;
@@ -354,7 +384,9 @@ function applyFilter() {
   const entity   = document.getElementById('fEntity').value;
   const branch   = document.getElementById('fBranch').value;
 
-  // Filter master
+  lastFilter = { tglMulai, tglAkhir, region, entity, branch };
+
+  // Filter master aktif
   let master = allMaster.filter(m => m.status === 'Aktif');
   if (region) master = master.filter(m => m.region === region);
   if (entity) master = master.filter(m => m.entity === entity);
@@ -381,22 +413,24 @@ function applyFilter() {
     return true;
   });
 
-  const totalHadir = absensi.length;
-  const totalIzin  = izin.length;
-  const totalAbsen = Math.max(0, totalUser - totalHadir - totalIzin);
-  const pct        = totalUser > 0 ? Math.round((totalHadir / (totalHadir + totalAbsen + totalIzin || 1)) * 100) : 0;
+  const hadirIds = new Set(absensi.map(a => a.id));
+  const izinIds  = new Set(izin.map(a => a.id));
+  const totalHadir = hadirIds.size;
+  const totalIzin  = izinIds.size;
 
-  // Update KPI
+  // Hitung unique user yang tidak hadir sama sekali di range ini
+  const belumSet = master.filter(m => !hadirIds.has(m.id) && !izinIds.has(m.id));
+  const totalAbsen = belumSet.length;
+  const pct = totalUser > 0 ? Math.round((totalHadir / totalUser) * 100) : 0;
+
   document.getElementById('kTotal').textContent = totalUser;
-  document.getElementById('kHadir').textContent = totalHadir;
-  document.getElementById('kIzin').textContent  = totalIzin;
+  document.getElementById('kHadir').textContent = absensi.length;
+  document.getElementById('kIzin').textContent  = izin.length;
   document.getElementById('kAbsen').textContent = totalAbsen;
   document.getElementById('kPct').textContent   = pct + '%';
 
-  // Charts
   renderCharts(absensi, izin);
 
-  // Table — gabung absensi + izin
   const combined = [
     ...absensi.map(a => ({...a, tipe:'Hadir'})),
     ...izin.map(a => ({...a, jamMasuk:'—', jamKeluar:'—', tipe: a.jenisIzin || 'Izin'}))
@@ -408,61 +442,46 @@ function applyFilter() {
 
 function parseTgl(tgl) {
   if (!tgl) return '';
-  const p = tgl.split('/');
+  const p = tgl.toString().split('/');
   if (p.length === 3) return p[2]+'-'+p[1]+'-'+p[0];
   return tgl;
 }
 
 // ---- CHARTS ----
 function renderCharts(absensi, izin) {
-  // Tren harian
   const tglMap = {};
   absensi.forEach(a => { tglMap[a.tanggal] = (tglMap[a.tanggal]||0)+1; });
   const tglKeys = Object.keys(tglMap).sort((a,b)=>parseTgl(a).localeCompare(parseTgl(b)));
   const tglVals = tglKeys.map(k=>tglMap[k]);
 
   if (chartTren) chartTren.destroy();
-  const ctxT = document.getElementById('chartTren').getContext('2d');
-  chartTren = new Chart(ctxT, {
+  chartTren = new Chart(document.getElementById('chartTren').getContext('2d'), {
     type: 'bar',
     data: {
       labels: tglKeys,
-      datasets: [{
-        label: 'Hadir',
-        data: tglVals,
-        backgroundColor: '#1a6fc4CC',
-        borderRadius: 4,
-        borderSkipped: false
-      }]
+      datasets: [{ label:'Hadir', data:tglVals, backgroundColor:'#1a6fc4CC', borderRadius:4, borderSkipped:false }]
     },
     options: {
-      plugins: { legend: { display: false } },
+      plugins: { legend:{ display:false } },
       scales: {
-        y: { ticks: { font:{size:10}, color:'#888', stepSize:1 }, grid: { color:'rgba(0,0,0,.05)' } },
-        x: { ticks: { font:{size:9}, color:'#888', maxRotation:45 }, grid: { display:false } }
+        y: { ticks:{ font:{size:10}, color:'#888', stepSize:1 }, grid:{ color:'rgba(0,0,0,.05)' } },
+        x: { ticks:{ font:{size:9}, color:'#888', maxRotation:45 }, grid:{ display:false } }
       },
-      animation: { duration: 500 }
+      animation: { duration:500 }
     }
   });
 
-  // Donut status
   if (chartStatus) chartStatus.destroy();
-  const ctxS = document.getElementById('chartStatus').getContext('2d');
-  chartStatus = new Chart(ctxS, {
+  chartStatus = new Chart(document.getElementById('chartStatus').getContext('2d'), {
     type: 'doughnut',
     data: {
       labels: ['Hadir','Izin/Sakit/Cuti'],
-      datasets: [{
-        data: [absensi.length, izin.length],
-        backgroundColor: ['#1e8449','#d68910'],
-        borderWidth: 0,
-        hoverOffset: 4
-      }]
+      datasets: [{ data:[absensi.length, izin.length], backgroundColor:['#1e8449','#d68910'], borderWidth:0, hoverOffset:4 }]
     },
     options: {
       cutout: '65%',
-      plugins: { legend: { position:'bottom', labels:{ font:{size:11}, color:'#888', padding:10 } } },
-      animation: { duration: 500 }
+      plugins: { legend:{ position:'bottom', labels:{ font:{size:11}, color:'#888', padding:10 } } },
+      animation: { duration:500 }
     }
   });
 }
@@ -473,7 +492,6 @@ function renderTable(data) {
     document.getElementById('tableBody').innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Tidak ada data untuk filter ini</div>';
     return;
   }
-
   const rows = data.map(d => `
     <tr>
       <td class="mono">${d.tanggal||'—'}</td>
@@ -486,30 +504,131 @@ function renderTable(data) {
       <td class="mono">${d.jamKeluar||'—'}</td>
       <td><span class="badge ${(d.tipe||'').toLowerCase()}">${d.tipe||'—'}</span></td>
     </tr>`).join('');
-
   document.getElementById('tableBody').innerHTML = `
     <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th>Tanggal</th><th>ID</th><th>Nama</th>
-            <th>Region</th><th>Entity</th><th>Branch</th>
-            <th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th>Tanggal</th><th>ID</th><th>Nama</th>
+          <th>Region</th><th>Entity</th><th>Branch</th>
+          <th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th>
+        </tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
 }
 
-// ---- EXPORT EXCEL ----
-function exportExcel() {
-  const tglMulai = document.getElementById('fTglMulai').value;
-  const tglAkhir = document.getElementById('fTglAkhir').value;
-  const region   = document.getElementById('fRegion').value;
-  const entity   = document.getElementById('fEntity').value;
-  const branch   = document.getElementById('fBranch').value;
+// ---- MODAL BELUM ABSEN ----
+function openModalBelumAbsen() {
+  const { tglMulai, tglAkhir, region, entity, branch } = lastFilter;
 
+  // Filter master aktif sesuai filter bar
+  let master = allMaster.filter(m => m.status === 'Aktif');
+  if (region) master = master.filter(m => m.region === region);
+  if (entity) master = master.filter(m => m.entity === entity);
+  if (branch) master = master.filter(m => m.branch === branch);
+
+  // Ambil semua tanggal unik dalam range
+  const tglList = getDateRange(tglMulai, tglAkhir);
+
+  // Untuk setiap tanggal, cari siapa yang tidak absen & tidak izin
+  const rows = [];
+  tglList.forEach(tglIso => {
+    const tglId = tglIso.split('-').reverse().join('/');
+
+    const hadirPadaTgl = new Set(
+      allData.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id)
+    );
+    const izinPadaTgl = new Set(
+      allIzin.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id)
+    );
+
+    master.forEach(m => {
+      if (!hadirPadaTgl.has(m.id) && !izinPadaTgl.has(m.id)) {
+        rows.push({ tanggal: tglId, id: m.id, nama: m.nama, region: m.region, entity: m.entity, branch: m.branch });
+      }
+    });
+  });
+
+  // Urutkan by tanggal terbaru dulu
+  rows.sort((a,b) => parseTgl(b.tanggal).localeCompare(parseTgl(a.tanggal)));
+  belumAbsenData = rows;
+
+  // Update modal filter tags
+  const tags = [];
+  if (tglMulai && tglAkhir) tags.push(formatTglDisplay(tglMulai) + ' — ' + formatTglDisplay(tglAkhir));
+  if (region) tags.push(region); else tags.push('Semua Region');
+  if (entity) tags.push(entity);
+  if (branch) tags.push(branch); else tags.push('Semua Branch');
+
+  document.getElementById('modalFilterTags').innerHTML = tags.map(t =>
+    `<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalCount').textContent = rows.length + ' data belum absen';
+  document.getElementById('modalSubTitle').textContent =
+    'Salesman tanpa keterangan · ' + formatTglDisplay(tglMulai) + ' s/d ' + formatTglDisplay(tglAkhir);
+  document.getElementById('modalFootInfo').textContent = rows.length + ' total baris dari ' + tglList.length + ' hari × ' + master.length + ' user';
+
+  // Render tabel modal
+  if (rows.length === 0) {
+    document.getElementById('modalTableBody').innerHTML =
+      '<div class="empty"><div class="empty-icon">🎉</div>Semua user sudah absen di periode ini!</div>';
+  } else {
+    const tblRows = rows.map((r, i) => `
+      <tr>
+        <td style="color:var(--text-l);font-size:12px;">${i+1}</td>
+        <td class="mono">${r.tanggal}</td>
+        <td class="mono">${r.id}</td>
+        <td>${r.nama}</td>
+        <td>${r.region}</td>
+        <td>${r.entity}</td>
+        <td>${r.branch}</td>
+      </tr>`).join('');
+    document.getElementById('modalTableBody').innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>No</th><th>Tanggal</th><th>ID</th><th>Nama</th>
+            <th>Region</th><th>Entity</th><th>Branch</th>
+          </tr></thead>
+          <tbody>${tblRows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('show');
+}
+
+function closeModalOnBackdrop(e) {
+  if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+// ---- HELPER: generate date range ----
+function getDateRange(tglMulai, tglAkhir) {
+  if (!tglMulai || !tglAkhir) return [];
+  const dates = [];
+  const start = new Date(tglMulai);
+  const end   = new Date(tglAkhir);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    dates.push(y+'-'+m+'-'+dd);
+  }
+  return dates;
+}
+
+function formatTglDisplay(tglIso) {
+  if (!tglIso) return '—';
+  const p = tglIso.split('-');
+  return p[2]+'/'+p[1]+'/'+p[0];
+}
+
+// ---- EXPORT EXCEL (main) ----
+function exportExcel() {
+  const { tglMulai, tglAkhir, region, entity, branch } = lastFilter;
   let absensi = allData.filter(a => {
     const tgl = parseTgl(a.tanggal);
     if (tglMulai && tgl < tglMulai) return false;
@@ -519,7 +638,6 @@ function exportExcel() {
     if (branch && a.branch !== branch) return false;
     return true;
   });
-
   let izin = allIzin.filter(a => {
     const tgl = parseTgl(a.tanggal);
     if (tglMulai && tgl < tglMulai) return false;
@@ -527,30 +645,32 @@ function exportExcel() {
     if (branch && a.branch !== branch) return false;
     return true;
   });
-
   const combined = [
-    ...absensi.map(a => ({
-      Tanggal: a.tanggal, 'ID Karyawan': a.id, Nama: a.nama,
-      Region: a.region, Entity: a.entity, Branch: a.branch,
-      'Jam Masuk': a.jamMasuk, 'Jam Keluar': a.jamKeluar,
-      Zona: a.zona, Status: 'Hadir'
-    })),
-    ...izin.map(a => ({
-      Tanggal: a.tanggal, 'ID Karyawan': a.id, Nama: a.nama,
-      Region: '—', Entity: '—', Branch: a.branch,
-      'Jam Masuk': '—', 'Jam Keluar': '—',
-      Zona: '—', Status: a.jenisIzin || 'Izin'
-    }))
+    ...absensi.map(a => ({ Tanggal:a.tanggal, 'ID Karyawan':a.id, Nama:a.nama, Region:a.region, Entity:a.entity, Branch:a.branch, 'Jam Masuk':a.jamMasuk, 'Jam Keluar':a.jamKeluar, Zona:a.zona||'—', Status:'Hadir' })),
+    ...izin.map(a => ({ Tanggal:a.tanggal, 'ID Karyawan':a.id, Nama:a.nama, Region:'—', Entity:'—', Branch:a.branch, 'Jam Masuk':'—', 'Jam Keluar':'—', Zona:'—', Status:a.jenisIzin||'Izin' }))
   ].sort((a,b) => parseTgl(b.Tanggal).localeCompare(parseTgl(a.Tanggal)));
-
-  const ws   = XLSX.utils.json_to_sheet(combined);
-  const wb   = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(combined);
+  const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Absensi');
-  const fn   = 'Absensi_HOA_' + tglMulai + '_sd_' + tglAkhir + '.xlsx';
-  XLSX.writeFile(wb, fn);
+  XLSX.writeFile(wb, 'Absensi_HOA_'+tglMulai+'_sd_'+tglAkhir+'.xlsx');
+}
+
+// ---- EXPORT EXCEL (modal belum absen) ----
+function exportExcelBelumAbsen() {
+  if (!belumAbsenData.length) return;
+  const { tglMulai, tglAkhir } = lastFilter;
+  const rows = belumAbsenData.map(r => ({
+    Tanggal: r.tanggal, 'ID Karyawan': r.id, Nama: r.nama,
+    Region: r.region, Entity: r.entity, Branch: r.branch, Status: 'Belum Absen'
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Belum Absen');
+  XLSX.writeFile(wb, 'BelumAbsen_HOA_'+tglMulai+'_sd_'+tglAkhir+'.xlsx');
 }
 
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
   if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') doLogin();
 });
 </script>
