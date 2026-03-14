@@ -121,7 +121,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .detail-key{font-size:12px;color:var(--text-m)}
 .detail-val{font-size:12px;font-weight:600;font-family:'DM Mono',monospace}
 
-/* CAMERA */
 .cam-screen{position:absolute;inset:0;background:#000;z-index:300;display:flex;flex-direction:column}
 .cam-screen.hidden{display:none}
 .cam-header{background:#000;padding:16px 20px 12px;text-align:center}
@@ -134,7 +133,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .cam-capture:active{transform:scale(.94)}
 #canvas{display:none}
 
-/* LOGIN */
 .login-screen{position:absolute;inset:0;background:var(--blue);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
 .login-screen.hidden{display:none}
 .login-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 28px 10px;min-height:180px}
@@ -307,7 +305,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
     <div class="info-list">
       <div class="info-row-item">
         <div class="info-row-key">Versi Aplikasi</div>
-        <div class="info-row-val">v2.0.0</div>
+        <div class="info-row-val">v2.1.0</div>
       </div>
       <div class="info-row-item">
         <div class="info-row-key">Zona Waktu</div>
@@ -359,7 +357,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbyNCXKkwycOI0RJxh7DqCqRb5AZrs0a-_WGaxif_HZyofzMAPJh2UY4P2_GdqDpdnjcSw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbx3E4OUBIxMdwo6yDlhml8bZNzG0ix1rnKyaAThsOQBSvcpVFzZ8lQ0EOsIUQj3kuUPDg/exec';
 
 let user = null;
 let gpsLat = null, gpsLng = null, gpsAcc = null;
@@ -367,12 +365,11 @@ let selfieCI = '', selfieCO = '';
 let checkedIn = false, checkedOut = false, hasIzin = false;
 let ciTime = '', coTime = '';
 let camStream = null, facingMode = 'user';
-let camMode = 'ci'; // 'ci' or 'co'
+let camMode = 'ci';
 let camResolve = null;
 let tzOffset = new Date().getTimezoneOffset();
 let zona = getZonaLocal();
 
-// ---- TIMEZONE ----
 function getZonaLocal() {
   const off = new Date().getTimezoneOffset();
   if (off === -540) return 'WIT';
@@ -380,7 +377,6 @@ function getZonaLocal() {
   return 'WIB';
 }
 
-// ---- DEVICE ID ----
 function getDeviceId() {
   let did = localStorage.getItem('hoa_device_id');
   if (!did) {
@@ -390,7 +386,6 @@ function getDeviceId() {
   return did;
 }
 
-// ---- INIT ----
 window.addEventListener('load', () => {
   const saved = localStorage.getItem('hoa_user');
   if (saved) { user = JSON.parse(saved); initApp(); }
@@ -411,7 +406,6 @@ async function initApp() {
   await cekStatusHariIni();
 }
 
-// ---- CEK STATUS HARI INI ----
 async function cekStatusHariIni() {
   if (!user) return;
   try {
@@ -437,7 +431,6 @@ async function cekStatusHariIni() {
       }
     }
   } catch(e) {
-    // offline — pakai cache lokal
     const today = new Date().toLocaleDateString('id-ID');
     const ciSaved = localStorage.getItem('hoa_ci_' + today);
     const coSaved = localStorage.getItem('hoa_co_' + today);
@@ -455,7 +448,6 @@ async function cekStatusHariIni() {
   }
 }
 
-// ---- LOGIN ----
 async function doLogin() {
   const id  = document.getElementById('inputId').value.trim().toUpperCase();
   const pin = document.getElementById('inputPin').value.trim();
@@ -490,7 +482,6 @@ function showLoginError(msg) {
   el.textContent = msg; el.classList.add('show');
 }
 
-// ---- USER UI ----
 function setUserUI() {
   if (!user) return;
   const init = user.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -512,7 +503,6 @@ function setUserUI() {
   document.getElementById('profilDevice').textContent = getDeviceId().substring(0,20)+'...';
 }
 
-// ---- CLOCK ----
 function updateClock() {
   const now = new Date();
   const t = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
@@ -522,7 +512,6 @@ function updateClock() {
   document.getElementById('dateEl').textContent  = d;
 }
 
-// ---- GPS ----
 function startGPS() {
   if (!navigator.geolocation) { document.getElementById('gpsStatus').textContent = 'Tidak didukung'; return; }
   navigator.geolocation.watchPosition(pos => {
@@ -544,7 +533,6 @@ function startGPS() {
   }, {enableHighAccuracy:true, maximumAge:10000});
 }
 
-// ---- FAKE GPS DETECTION ----
 function isMockLocation(pos) {
   if (pos.coords.accuracy !== undefined && pos.coords.accuracy < 2) return true;
   if (pos.coords.altitudeAccuracy === 0) return true;
@@ -552,7 +540,6 @@ function isMockLocation(pos) {
   return false;
 }
 
-// ---- CAMERA ----
 function openCamera(mode) {
   camMode = mode;
   document.getElementById('camTitle').textContent = mode === 'ci' ? 'Foto Check-in' : 'Foto Check-out';
@@ -617,7 +604,6 @@ function capturePhoto() {
   if (camResolve) { camResolve(b64); camResolve = null; }
 }
 
-// ---- CHECKIN ----
 async function doCheckin() {
   if (!gpsLat) { showAlert('GPS belum aktif. Aktifkan lokasi di HP.','warning'); return; }
   if (checkedIn) { showAlert('Sudah check-in hari ini.','warning'); return; }
@@ -656,7 +642,6 @@ async function doCheckin() {
   }
 }
 
-// ---- CHECKOUT ----
 async function doCheckout() {
   if (!checkedIn)  { showAlert('Belum check-in hari ini.','warning'); return; }
   if (checkedOut)  { showAlert('Sudah check-out hari ini.','warning'); return; }
@@ -693,7 +678,6 @@ async function doCheckout() {
   }
 }
 
-// ---- IZIN ----
 async function doIzin() {
   const jenis = document.getElementById('jenisIzin').value;
   const tgl   = document.getElementById('tglIzin').value;
@@ -723,7 +707,6 @@ async function doIzin() {
   }
 }
 
-// ---- HISTORY ----
 async function loadHistory() {
   const el = document.getElementById('histList');
   el.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Memuat...</div></div>';
@@ -753,25 +736,23 @@ async function loadHistory() {
   }
 }
 
-// ---- LOGOUT ----
 function doLogout() {
   if (!confirm('Yakin ingin keluar dari akun '+user.nama+'?')) return;
   localStorage.removeItem('hoa_user');
   location.reload();
 }
 
-// ---- HELPERS ----
 function setStatus(cls, label, sub) {
   document.getElementById('statusCard').className = 'status-card '+cls;
   document.getElementById('statusLabel').textContent = label;
   document.getElementById('statusSub').textContent   = sub;
 }
-function enableCI() { const b=document.getElementById('btnCI'); b.className='btn-main btn-ci'; b.disabled=false; b.textContent='Check-in Sekarang'; }
-function disableCI() { const b=document.getElementById('btnCI'); b.className='btn-main btn-disabled'; b.disabled=true; b.textContent='Sudah Check-in ✓'; }
-function enableCO() { const b=document.getElementById('btnCO'); b.className='btn-main btn-co'; b.disabled=false; b.textContent='Check-out'; }
-function disableCO() { const b=document.getElementById('btnCO'); b.className='btn-main btn-disabled'; b.disabled=true; b.textContent='Sudah Check-out ✓'; }
-function enableIzin() { const b=document.getElementById('btnIzin'); b.className='btn-main btn-outline'; b.disabled=false; b.textContent='Ajukan Izin / Sakit / Cuti'; }
-function lockIzin() {
+function enableCI()  { const b=document.getElementById('btnCI');  b.className='btn-main btn-ci';      b.disabled=false; b.textContent='Check-in Sekarang'; }
+function disableCI() { const b=document.getElementById('btnCI');  b.className='btn-main btn-disabled'; b.disabled=true;  b.textContent='Sudah Check-in ✓'; }
+function enableCO()  { const b=document.getElementById('btnCO');  b.className='btn-main btn-co';      b.disabled=false; b.textContent='Check-out'; }
+function disableCO() { const b=document.getElementById('btnCO');  b.className='btn-main btn-disabled'; b.disabled=true;  b.textContent='Sudah Check-out ✓'; }
+function enableIzin(){ const b=document.getElementById('btnIzin');b.className='btn-main btn-outline'; b.disabled=false; b.textContent='Ajukan Izin / Sakit / Cuti'; }
+function lockIzin()  {
   const b=document.getElementById('btnIzin'); b.className='btn-main btn-disabled'; b.disabled=true;
   document.getElementById('izinForm').style.display='none';
   document.getElementById('izinLocked').style.display='block';
@@ -815,10 +796,11 @@ function showLoading(msg) {
   document.getElementById('loadingOverlay').classList.remove('hidden');
 }
 function hideLoading() { document.getElementById('loadingOverlay').classList.add('hidden'); }
+
 async function apiPost(data) {
   const foto = data.foto || null;
   delete data.foto;
-  const res = await fetch(API_URL, {method:'POST', body:JSON.stringify(data)});
+  const res  = await fetch(API_URL, {method:'POST', body:JSON.stringify(data)});
   const json = await res.json();
   if (json.status === 'ok' && foto && (data.action === 'checkin' || data.action === 'checkout')) {
     try {
@@ -829,10 +811,11 @@ async function apiPost(data) {
   }
   return json;
 }
+
 document.addEventListener('keydown', e => {
   if (e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) doLogin();
 });
 </script>
 </body>
 </html>
-<!-- v3.1 patch: foto upload terpisah sudah di Code.gs -->
+<!-- v3.2 fix: GPS checkout kolom benar, API URL updated -->
