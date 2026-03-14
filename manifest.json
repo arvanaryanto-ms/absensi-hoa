@@ -1,14 +1,25 @@
 {
-  "name": "Absensi Salesman — Cimory SFA",
-  "short_name": "Cimory SFA",
-  "description": "Sistem Absensi Salesman Lapangan Cimory",
-  "start_url": "/index.html",
+  "name": "Absensi HOA",
+  "short_name": "Absensi HOA",
+  "description": "Sistem Absensi Salesman Lapangan HOA",
+  "start_url": "/absensi-hoa/index.html",
+  "scope": "/absensi-hoa/",
   "display": "standalone",
   "background_color": "#0a3d62",
   "theme_color": "#0a3d62",
   "orientation": "portrait",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "https://via.placeholder.com/192x192/0a3d62/ffffff?text=HOA",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/0a3d62/ffffff?text=HOA",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
