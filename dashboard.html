@@ -41,61 +41,96 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f3f7;color:var(--t
 /* APP */
 .app{display:none;min-height:100vh;flex-direction:column}
 .app.show{display:flex}
-
-/* TOP NAV */
 .topnav{background:var(--blue);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .topnav-logo{font-size:15px;font-weight:700;letter-spacing:-.3px}
 .topnav-sub{font-size:11px;opacity:.65}
 .topnav-right{display:flex;align-items:center;gap:16px}
 .topnav-admin{font-size:13px;opacity:.8}
 .btn-logout-top{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
-
-/* MAIN */
 .main{flex:1;padding:24px;overflow-y:auto}
 
+/* WARN BANNER */
+.warn-banner{border-radius:var(--radius-s);padding:10px 16px;font-size:13px;margin-bottom:14px;display:none;align-items:center;gap:8px;font-weight:500}
+.warn-banner.show{display:flex}
+.warn-banner.yellow{background:#fef3cd;border:1px solid #f0c040;color:#7d5a00}
+.warn-banner.red{background:var(--red-l);border:1px solid #f5b7b1;color:#922b21}
+
 /* FILTER BAR */
-.filter-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border);margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
-.filter-group{display:flex;flex-direction:column;gap:5px;min-width:130px;flex:1}
+.filter-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border);margin-bottom:20px}
+.filter-row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:5px;min-width:110px;flex:1}
 .filter-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
-.filter-select,.filter-input{padding:8px 12px;border-radius:var(--radius-s);border:1.5px solid var(--border);font-family:inherit;font-size:13px;color:var(--text);background:var(--gray-l);outline:none;width:100%}
+.filter-select,.filter-input{padding:8px 12px;border-radius:var(--radius-s);border:1.5px solid var(--border);font-family:inherit;font-size:13px;color:var(--text);background:var(--gray-l);outline:none;width:100%;transition:border-color .15s;cursor:pointer}
 .filter-select:focus,.filter-input:focus{border-color:var(--blue-m)}
-.btn-filter{padding:9px 20px;border-radius:var(--radius-s);border:none;background:var(--blue);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end;white-space:nowrap}
+.filter-input.err{border-color:var(--red)!important}
+.btn-filter{padding:9px 20px;border-radius:var(--radius-s);border:none;background:var(--blue);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end;white-space:nowrap;transition:opacity .15s}
+.btn-filter:hover{opacity:.9}
+.btn-filter:disabled{opacity:.45;cursor:not-allowed}
 .btn-export{padding:9px 20px;border-radius:var(--radius-s);border:1.5px solid var(--green);background:transparent;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end;white-space:nowrap}
 
-/* KPI CARDS */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
-.kpi-card{background:var(--white);border-radius:var(--radius);padding:16px;border:1px solid var(--border);position:relative;overflow:hidden}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.kpi-card.blue::before{background:var(--blue-m)}
-.kpi-card.green::before{background:var(--green)}
-.kpi-card.amber::before{background:var(--amber)}
-.kpi-card.red::before{background:var(--red)}
-.kpi-card.purple::before{background:var(--purple)}
-.kpi-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
-.kpi-value{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:-1px;line-height:1}
-.kpi-sub{font-size:11px;color:var(--text-l);margin-top:6px}
-.kpi-card.blue .kpi-value{color:var(--blue-m)}
-.kpi-card.green .kpi-value{color:var(--green)}
-.kpi-card.amber .kpi-value{color:var(--amber)}
-.kpi-card.red .kpi-value{color:var(--red)}
-.kpi-card.purple .kpi-value{color:var(--purple)}
+/* STATUS DROPDOWN */
+.status-dropdown-wrap{position:relative;flex:1;min-width:150px}
+.status-dropdown-btn{width:100%;padding:8px 12px;border-radius:var(--radius-s);border:1.5px solid var(--border);font-family:inherit;font-size:13px;color:var(--text);background:var(--gray-l);outline:none;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color .15s}
+.status-dropdown-btn:focus,.status-dropdown-btn.open{border-color:var(--blue-m);background:#fff}
+.status-dropdown-panel{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1.5px solid var(--blue-m);border-radius:var(--radius-s);padding:8px 0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.status-dropdown-panel.open{display:block}
+.status-option{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;font-size:13px;transition:background .1s}
+.status-option:hover{background:var(--gray-l)}
+.status-option input[type=checkbox]{width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.status-divider{height:1px;background:var(--border);margin:4px 0}
+.s-dot-hadir{color:var(--green)}
+.s-dot-izin{color:var(--blue-m)}
+.s-dot-sakit{color:var(--amber)}
+.s-dot-cuti{color:var(--purple)}
 
-/* Clickable card */
+/* SECTION LABEL */
+.section-label{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.section-title{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.5px}
+.section-badge{border-radius:20px;padding:2px 10px;font-size:10px;font-weight:500}
+.section-badge.today{background:var(--green-l);border:1px solid #a9dfbf;color:var(--green)}
+.section-badge.range{background:var(--gray-l);border:1px solid var(--border);color:var(--text-m)}
+
+/* KPI CARDS */
+.kpi-grid-5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.kpi-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:var(--white);border-radius:var(--radius);padding:14px 16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-card.c-blue::before{background:var(--blue-m)}
+.kpi-card.c-green::before{background:var(--green)}
+.kpi-card.c-amber::before{background:var(--amber)}
+.kpi-card.c-red::before{background:var(--red)}
+.kpi-card.c-purple::before{background:var(--purple)}
+.kpi-card.c-gray::before{background:var(--text-l)}
+.kpi-label{font-size:10px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.kpi-value{font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:-1px;line-height:1}
+.kpi-sub{font-size:11px;color:var(--text-l);margin-top:6px}
+.kpi-card.c-blue .kpi-value{color:var(--blue-m)}
+.kpi-card.c-green .kpi-value{color:var(--green)}
+.kpi-card.c-amber .kpi-value{color:var(--amber)}
+.kpi-card.c-red .kpi-value{color:var(--red)}
+.kpi-card.c-purple .kpi-value{color:var(--purple)}
+.kpi-card.c-gray .kpi-value{color:var(--text-m)}
 .kpi-card.clickable{cursor:pointer;transition:box-shadow .15s,transform .1s}
 .kpi-card.clickable:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
-.kpi-badge-hint{position:absolute;top:10px;right:10px;font-size:10px;color:var(--red);background:var(--red-l);padding:2px 8px;border-radius:20px;border:1px solid #f5b7b1}
+.kpi-hint{position:absolute;top:10px;right:10px;font-size:9px;color:var(--red);background:var(--red-l);padding:2px 7px;border-radius:20px;border:1px solid #f5b7b1}
 
 /* CHARTS */
 .charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
 @media(max-width:768px){.charts-row{grid-template-columns:1fr}}
 .chart-card{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border)}
-.chart-title{font-size:11px;font-weight:600;color:var(--text-m);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+.chart-title{font-size:11px;font-weight:600;color:var(--text-m);margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.chart-sub{font-size:11px;color:var(--text-l);margin-bottom:12px}
 
 /* TABLE */
 .table-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
-.table-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.table-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
 .table-title{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
+.table-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .table-count{font-size:12px;color:var(--text-l)}
+.perpage-wrap{display:flex;align-items:center;gap:6px}
+.perpage-label{font-size:11px;color:var(--text-m)}
+.perpage-btn{padding:4px 10px;border-radius:var(--radius-s);border:1px solid var(--border);background:var(--gray-l);font-size:11px;cursor:pointer;font-family:inherit;color:var(--text-m);transition:all .15s}
+.perpage-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 thead tr{background:var(--gray-l)}
@@ -105,20 +140,32 @@ tbody tr:hover{background:#fafbfc}
 tbody tr:last-child td{border:none}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
 .badge.hadir{background:var(--green-l);color:var(--green)}
-.badge.izin,.badge.sakit,.badge.cuti{background:var(--amber-l);color:var(--amber)}
-.badge.absen{background:var(--red-l);color:var(--red)}
+.badge.izin{background:var(--blue-l);color:var(--blue-m)}
+.badge.sakit{background:var(--amber-l);color:var(--amber)}
+.badge.cuti{background:var(--purple-l);color:var(--purple)}
+.badge.belumabsen{background:var(--red-l);color:var(--red)}
 .mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+
+/* PAGINATION */
+.pagination{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.pagination-info{font-size:12px;color:var(--text-l)}
+.pagination-btns{display:flex;align-items:center;gap:4px}
+.pg-btn{padding:5px 10px;border-radius:var(--radius-s);border:1px solid var(--border);background:var(--gray-l);font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-m);min-width:34px;text-align:center;transition:all .15s}
+.pg-btn:hover:not(:disabled){background:var(--blue-l);border-color:var(--blue-m);color:var(--blue)}
+.pg-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.pg-btn:disabled{opacity:.4;cursor:not-allowed}
+.pg-ellipsis{padding:5px 6px;font-size:12px;color:var(--text-l)}
 
 /* MODAL */
 .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}
 .modal-backdrop.show{display:flex}
-.modal-box{background:var(--white);border-radius:var(--radius);width:100%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .2s ease}
+.modal-box{background:var(--white);border-radius:var(--radius);width:100%;max-width:720px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .2s ease}
 @keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .modal-head-title{font-size:15px;font-weight:700}
 .modal-head-sub{font-size:12px;color:var(--text-m);margin-top:2px}
 .btn-modal-close{background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-m)}
-.modal-filter{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;background:var(--gray-l)}
+.modal-filter{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0;background:var(--gray-l)}
 .modal-filter-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .modal-tag{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text-m)}
 .modal-count{background:var(--red-l);color:var(--red);border:1px solid #f5b7b1;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -134,11 +181,13 @@ tbody tr:last-child td{border:none}
 .empty{text-align:center;padding:40px;color:var(--text-l)}
 .empty-icon{font-size:32px;margin-bottom:8px}
 
-@media(max-width:600px){
+@media(max-width:700px){
   .main{padding:14px}
-  .filter-bar{flex-direction:column}
-  .filter-group{min-width:100%}
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .filter-row{flex-direction:column}
+  .filter-group,.status-dropdown-wrap{min-width:100%}
+  .kpi-grid-5{grid-template-columns:repeat(2,1fr)}
+  .kpi-grid-4{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -176,71 +225,114 @@ tbody tr:last-child td{border:none}
 
   <div class="main">
 
+    <!-- WARN BANNERS -->
+    <div class="warn-banner yellow" id="warnDate"><span id="warnDateMsg"></span></div>
+    <div class="warn-banner red" id="warnRange"><span id="warnRangeMsg"></span></div>
+
     <!-- FILTER BAR -->
     <div class="filter-bar">
-      <div class="filter-group">
-        <div class="filter-label">Tanggal Mulai</div>
-        <input class="filter-input" type="date" id="fTglMulai">
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="filter-label">Tanggal Mulai</div>
+          <input class="filter-input" type="date" id="fTglMulai" onchange="validateDates()">
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Tanggal Akhir</div>
+          <input class="filter-input" type="date" id="fTglAkhir" onchange="validateDates()">
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Region</div>
+          <select class="filter-select" id="fRegion"><option value="">Semua Region</option></select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Entity</div>
+          <select class="filter-select" id="fEntity"><option value="">Semua Entity</option></select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Branch</div>
+          <select class="filter-select" id="fBranch"><option value="">Semua Branch</option></select>
+        </div>
+        <!-- STATUS DROPDOWN CHECKLIST -->
+        <div class="filter-group status-dropdown-wrap">
+          <div class="filter-label">Status</div>
+          <button class="status-dropdown-btn" id="statusDropBtn" onclick="toggleStatusDrop()">
+            <span id="statusDropLabel">Semua Status</span>
+            <span>▾</span>
+          </button>
+          <div class="status-dropdown-panel" id="statusDropPanel">
+            <div class="status-option" onclick="toggleAll(event)">
+              <input type="checkbox" id="chkAll" checked onchange="toggleAll(event)">
+              <span style="font-weight:600;">Semua Status</span>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-option" onclick="toggleStatus('Hadir',event)">
+              <input type="checkbox" id="chkHadir" checked onchange="toggleStatus('Hadir',event)">
+              <span class="s-dot-hadir" style="font-weight:500;">● Hadir</span>
+            </div>
+            <div class="status-option" onclick="toggleStatus('Izin',event)">
+              <input type="checkbox" id="chkIzin" checked onchange="toggleStatus('Izin',event)">
+              <span class="s-dot-izin" style="font-weight:500;">● Izin</span>
+            </div>
+            <div class="status-option" onclick="toggleStatus('Sakit',event)">
+              <input type="checkbox" id="chkSakit" checked onchange="toggleStatus('Sakit',event)">
+              <span class="s-dot-sakit" style="font-weight:500;">● Sakit</span>
+            </div>
+            <div class="status-option" onclick="toggleStatus('Cuti',event)">
+              <input type="checkbox" id="chkCuti" checked onchange="toggleStatus('Cuti',event)">
+              <span class="s-dot-cuti" style="font-weight:500;">● Cuti</span>
+            </div>
+            <div class="status-option" onclick="toggleStatus('Belum Absen',event)">
+              <input type="checkbox" id="chkBelumAbsen" onchange="toggleStatus('Belum Absen',event)">
+              <span style="color:#c0392b;font-weight:500;">● Belum Absen</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-filter" id="btnTampilkan" onclick="applyFilter()">Tampilkan</button>
+        <button class="btn-export" onclick="exportExcel()">Download Excel</button>
       </div>
-      <div class="filter-group">
-        <div class="filter-label">Tanggal Akhir</div>
-        <input class="filter-input" type="date" id="fTglAkhir">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Region</div>
-        <select class="filter-select" id="fRegion"><option value="">Semua Region</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Entity</div>
-        <select class="filter-select" id="fEntity"><option value="">Semua Entity</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Branch</div>
-        <select class="filter-select" id="fBranch"><option value="">Semua Branch</option></select>
-      </div>
-      <button class="btn-filter" onclick="applyFilter()">Tampilkan</button>
-      <button class="btn-export" onclick="exportExcel()">Download Excel</button>
     </div>
 
-    <!-- KPI -->
-    <div class="kpi-grid">
-      <div class="kpi-card blue">
-        <div class="kpi-label">Total User</div>
-        <div class="kpi-value" id="kTotal">—</div>
-        <div class="kpi-sub">Terdaftar aktif</div>
+    <!-- SECTION: HARI BERJALAN -->
+    <div class="section-label">
+      <span class="section-title">Hari Berjalan</span>
+      <span class="section-badge today" id="badgeHari">—</span>
+    </div>
+    <div class="kpi-grid-5" id="kpiHari">
+      <div class="kpi-card c-blue"><div class="kpi-label">Total User</div><div class="kpi-value" id="hTotal">—</div><div class="kpi-sub">user aktif</div></div>
+      <div class="kpi-card c-green"><div class="kpi-label">Sudah Hadir</div><div class="kpi-value" id="hHadir">—</div><div class="kpi-sub">check-in hari ini</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">Izin Hari Ini</div><div class="kpi-value" id="hIzin">—</div><div class="kpi-sub">izin / sakit / cuti</div></div>
+      <div class="kpi-card c-red clickable" onclick="openModal()">
+        <div class="kpi-hint">↗ detail</div>
+        <div class="kpi-label">Belum Absen</div>
+        <div class="kpi-value" id="hBelum">—</div>
+        <div class="kpi-sub">tanpa keterangan</div>
       </div>
-      <div class="kpi-card green">
-        <div class="kpi-label">Total Hadir</div>
-        <div class="kpi-value" id="kHadir">—</div>
-        <div class="kpi-sub">Check-in periode ini</div>
-      </div>
-      <div class="kpi-card amber">
-        <div class="kpi-label">Total Izin</div>
-        <div class="kpi-value" id="kIzin">—</div>
-        <div class="kpi-sub">Izin/Sakit/Cuti</div>
-      </div>
-      <div class="kpi-card red clickable" id="cardTidakHadir" onclick="openModalBelumAbsen()">
-        <div class="kpi-badge-hint">Klik untuk detail</div>
-        <div class="kpi-label">Tidak Hadir</div>
-        <div class="kpi-value" id="kAbsen">—</div>
-        <div class="kpi-sub">Tanpa keterangan</div>
-      </div>
-      <div class="kpi-card purple">
-        <div class="kpi-label">% Kehadiran</div>
-        <div class="kpi-value" id="kPct">—</div>
-        <div class="kpi-sub">Dari total hadir wajib</div>
-      </div>
+      <div class="kpi-card c-purple"><div class="kpi-label">% Hadir</div><div class="kpi-value" id="hPct">—</div><div class="kpi-sub">dari total user</div></div>
+    </div>
+
+    <!-- SECTION: STATISTIK RANGE -->
+    <div class="section-label">
+      <span class="section-title">Statistik Range</span>
+      <span class="section-badge range" id="badgeRange">—</span>
+    </div>
+    <div class="kpi-grid-4">
+      <div class="kpi-card c-green"><div class="kpi-label">Total Hadir</div><div class="kpi-value" id="rHadir">—</div><div class="kpi-sub">total check-in</div></div>
+      <div class="kpi-card c-blue"><div class="kpi-label">Total Izin</div><div class="kpi-value" id="rIzin">—</div><div class="kpi-sub">izin tercatat</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">Sakit & Cuti</div><div class="kpi-value" id="rSakitCuti">—</div><div class="kpi-sub">sakit + cuti</div></div>
+      <div class="kpi-card c-purple"><div class="kpi-label">% Hadir Range</div><div class="kpi-value" id="rPct">—</div><div class="kpi-sub">hadir / (hadir+izin)</div></div>
     </div>
 
     <!-- CHARTS -->
     <div class="charts-row">
       <div class="chart-card">
         <div class="chart-title">Tren Kehadiran Harian</div>
-        <canvas id="chartTren" height="120"></canvas>
+        <div class="chart-sub" id="chartTrenSub">—</div>
+        <canvas id="chartTren" height="130"></canvas>
       </div>
       <div class="chart-card">
         <div class="chart-title">Komposisi Status</div>
-        <canvas id="chartStatus" height="120"></canvas>
+        <div class="chart-sub" id="chartStatusSub">Berdasarkan range & filter</div>
+        <canvas id="chartStatus" height="130"></canvas>
       </div>
     </div>
 
@@ -248,10 +340,20 @@ tbody tr:last-child td{border:none}
     <div class="table-card">
       <div class="table-header">
         <div class="table-title">Detail Absensi</div>
-        <div class="table-count" id="tableCount">—</div>
+        <div class="table-controls">
+          <div class="table-count" id="tableCount">—</div>
+          <div class="perpage-wrap">
+            <span class="perpage-label">Baris:</span>
+            <button class="perpage-btn" onclick="setPerPage(25)">25</button>
+            <button class="perpage-btn active" onclick="setPerPage(50)">50</button>
+            <button class="perpage-btn" onclick="setPerPage(100)">100</button>
+          </div>
+        </div>
       </div>
-      <div id="tableBody">
-        <div class="loading"><div class="spinner"></div>Memuat data...</div>
+      <div id="tableBody"><div class="loading"><div class="spinner"></div>Memuat data...</div></div>
+      <div class="pagination" id="paginationBar" style="display:none">
+        <div class="pagination-info" id="pgInfo">—</div>
+        <div class="pagination-btns" id="pgBtns"></div>
       </div>
     </div>
 
@@ -259,79 +361,144 @@ tbody tr:last-child td{border:none}
 </div>
 
 <!-- MODAL BELUM ABSEN -->
-<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalOnBackdrop(event)">
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalBackdrop(event)">
   <div class="modal-box">
     <div class="modal-head">
       <div>
         <div class="modal-head-title">Daftar Belum Absen</div>
-        <div class="modal-head-sub" id="modalSubTitle">Salesman tanpa keterangan pada periode filter</div>
+        <div class="modal-head-sub" id="modalSub">Salesman tanpa keterangan hari ini</div>
       </div>
       <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
     </div>
     <div class="modal-filter">
-      <div class="modal-filter-tags" id="modalFilterTags"></div>
+      <div class="modal-filter-tags" id="modalTags"></div>
       <div class="modal-count" id="modalCount">0 data</div>
     </div>
-    <div class="modal-body" id="modalTableBody">
-      <div class="loading"><div class="spinner"></div>Memuat...</div>
-    </div>
+    <div class="modal-body" id="modalBody"></div>
     <div class="modal-foot">
       <div class="modal-foot-info" id="modalFootInfo">—</div>
-      <button class="btn-export-modal" onclick="exportExcelBelumAbsen()">Download Excel</button>
+      <button class="btn-export-modal" onclick="exportExcelModal()">Download Excel</button>
     </div>
   </div>
 </div>
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbx3E4OUBIxMdwo6yDlhml8bZNzG0ix1rnKyaAThsOQBSvcpVFzZ8lQ0EOsIUQj3kuUPDg/exec';
-let adminUser  = null;
-let allData    = [];
-let allIzin    = [];
-let allMaster  = [];
-let chartTren  = null;
-let chartStatus = null;
 
-// data hasil filter terakhir — dipakai modal
+let adminUser = null;
+let allData = [], allIzin = [], allMaster = [];
+let chartTren = null, chartStatus = null;
+let tableData = []; // data setelah filter, untuk pagination
+let curPage = 1, perPage = 50;
+let belumAbsenData = [];
 let lastFilter = { tglMulai:'', tglAkhir:'', region:'', entity:'', branch:'' };
-let belumAbsenData = []; // untuk export excel modal
+let activeStatus = new Set(['Hadir','Izin','Sakit','Cuti']); // Belum Absen opt-in
+
+const S_COLOR = {
+  'Hadir' : { line:'#1e8449', bg:'rgba(30,132,73,.1)'   },
+  'Izin'  : { line:'#1a6fc4', bg:'rgba(26,111,196,.1)'  },
+  'Sakit' : { line:'#d68910', bg:'rgba(214,137,16,.1)'  },
+  'Cuti'  : { line:'#6c3483', bg:'rgba(108,52,131,.1)'  },
+};
+const S_PIE_COLOR = { Hadir:'#1e8449', Izin:'#1a6fc4', Sakit:'#d68910', Cuti:'#6c3483' };
 
 // ---- INIT ----
 window.addEventListener('load', () => {
-  const saved = localStorage.getItem('hoa_admin');
-  if (saved) { adminUser = JSON.parse(saved); showApp(); }
+  const s = localStorage.getItem('hoa_admin');
+  if (s) { adminUser = JSON.parse(s); showApp(); }
   setDefaultDates();
 });
 
 function setDefaultDates() {
-  const now   = new Date();
-  const y     = now.getFullYear();
-  const m     = String(now.getMonth()+1).padStart(2,'0');
-  const d     = String(now.getDate()).padStart(2,'0');
+  const n = new Date();
+  const y = n.getFullYear(), m = String(n.getMonth()+1).padStart(2,'0'), d = String(n.getDate()).padStart(2,'0');
   document.getElementById('fTglMulai').value = y+'-'+m+'-01';
   document.getElementById('fTglAkhir').value = y+'-'+m+'-'+d;
 }
 
-// ---- LOGIN ----
-async function doLogin() {
-  const user = document.getElementById('inputUser').value.trim();
-  const pass = document.getElementById('inputPass').value.trim();
-  const err  = document.getElementById('loginErr');
-  err.classList.remove('show');
-  if (!user||!pass) { showErr('Lengkapi username dan password'); return; }
-  try {
-    const res  = await fetch(API_URL+'?action=adminlogin&username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass));
-    const data = await res.json();
-    if (data.status === 'ok') {
-      adminUser = data.admin;
-      localStorage.setItem('hoa_admin', JSON.stringify(adminUser));
-      showApp();
-    } else { showErr(data.message || 'Username atau password salah'); }
-  } catch(e) { showErr('Gagal terhubung ke server'); }
+// ---- VALIDASI TANGGAL ----
+function validateDates() {
+  const m = document.getElementById('fTglMulai'), a = document.getElementById('fTglAkhir');
+  const wD = document.getElementById('warnDate'), wR = document.getElementById('warnRange');
+  const btn = document.getElementById('btnTampilkan');
+  let valid = true;
+
+  m.classList.remove('err'); a.classList.remove('err');
+  wD.classList.remove('show'); wR.classList.remove('show');
+
+  if (m.value && a.value) {
+    if (m.value > a.value) {
+      m.classList.add('err'); a.classList.add('err');
+      document.getElementById('warnDateMsg').textContent =
+        '⚠️  Tanggal mulai (' + formatTgl(m.value) + ') tidak boleh lebih besar dari tanggal akhir (' + formatTgl(a.value) + ').';
+      wD.classList.add('show'); valid = false;
+    } else {
+      const diff = Math.round((new Date(a.value) - new Date(m.value)) / 86400000);
+      if (diff > 31) {
+        m.classList.add('err'); a.classList.add('err');
+        document.getElementById('warnRangeMsg').textContent =
+          '⚠️  Range maksimal 31 hari. Saat ini ' + diff + ' hari (' + formatTgl(m.value) + ' — ' + formatTgl(a.value) + ').';
+        wR.classList.add('show'); valid = false;
+      }
+    }
+  }
+
+  btn.disabled = !valid;
+  return valid;
 }
 
-function showErr(msg) {
-  const el = document.getElementById('loginErr');
-  el.textContent = msg; el.classList.add('show');
+// ---- STATUS DROPDOWN ----
+function toggleStatusDrop() {
+  document.getElementById('statusDropBtn').classList.toggle('open');
+  document.getElementById('statusDropPanel').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.status-dropdown-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('statusDropBtn').classList.remove('open');
+    document.getElementById('statusDropPanel').classList.remove('open');
+  }
+});
+
+function toggleAll(e) {
+  if (e.target.tagName !== 'INPUT') e.stopPropagation();
+  const chkAll = document.getElementById('chkAll');
+  const checked = chkAll.checked;
+  ['Hadir','Izin','Sakit','Cuti','Belum Absen'].forEach(s => {
+    document.getElementById('chk'+s).checked = checked;
+    if (checked) activeStatus.add(s); else activeStatus.delete(s);
+  });
+  updateStatusLabel();
+}
+
+function toggleStatus(s, e) {
+  if (e.target.tagName !== 'INPUT') e.stopPropagation();
+  const chk = document.getElementById('chk'+s);
+  if (chk.checked) activeStatus.add(s); else activeStatus.delete(s);
+  document.getElementById('chkAll').checked = activeStatus.size === 4;
+  updateStatusLabel();
+}
+
+function updateStatusLabel() {
+  const el = document.getElementById('statusDropLabel');
+  if (activeStatus.size === 5 || activeStatus.size === 0) { el.textContent = 'Semua Status'; return; }
+  el.textContent = [...activeStatus].join(', ');
+}
+
+// ---- LOGIN ----
+async function doLogin() {
+  const u = document.getElementById('inputUser').value.trim();
+  const p = document.getElementById('inputPass').value.trim();
+  const e = document.getElementById('loginErr');
+  e.classList.remove('show');
+  if (!u||!p) { e.textContent='Lengkapi username dan password'; e.classList.add('show'); return; }
+  try {
+    const r = await fetch(API_URL+'?action=adminlogin&username='+encodeURIComponent(u)+'&password='+encodeURIComponent(p));
+    const d = await r.json();
+    if (d.status === 'ok') { adminUser = d.admin; localStorage.setItem('hoa_admin', JSON.stringify(adminUser)); showApp(); }
+    else { e.textContent = d.message||'Username atau password salah'; e.classList.add('show'); }
+  } catch(err) { e.textContent = 'Gagal terhubung ke server'; e.classList.add('show'); }
 }
 
 function showApp() {
@@ -343,19 +510,16 @@ function showApp() {
 
 function doLogout() {
   if (!confirm('Yakin ingin keluar?')) return;
-  localStorage.removeItem('hoa_admin');
-  location.reload();
+  localStorage.removeItem('hoa_admin'); location.reload();
 }
 
 // ---- LOAD DATA ----
 async function loadAllData() {
   try {
-    const res  = await fetch(API_URL+'?action=dashdata');
-    const data = await res.json();
-    if (data.status === 'ok') {
-      allData   = data.absensi || [];
-      allIzin   = data.izin    || [];
-      allMaster = data.master  || [];
+    const r = await fetch(API_URL+'?action=dashdata');
+    const d = await r.json();
+    if (d.status === 'ok') {
+      allData = d.absensi||[]; allIzin = d.izin||[]; allMaster = d.master||[];
       populateFilters();
       applyFilter();
     }
@@ -368,76 +532,380 @@ function populateFilters() {
   const regions  = [...new Set(allMaster.map(r=>r.region).filter(Boolean))].sort();
   const entities = [...new Set(allMaster.map(r=>r.entity).filter(Boolean))].sort();
   const branches = [...new Set(allMaster.map(r=>r.branch).filter(Boolean))].sort();
-  const fR = document.getElementById('fRegion');
-  const fE = document.getElementById('fEntity');
-  const fB = document.getElementById('fBranch');
+  const fR = document.getElementById('fRegion'), fE = document.getElementById('fEntity'), fB = document.getElementById('fBranch');
   regions.forEach(r  => { const o=document.createElement('option'); o.value=r; o.textContent=r; fR.appendChild(o); });
   entities.forEach(e => { const o=document.createElement('option'); o.value=e; o.textContent=e; fE.appendChild(o); });
   branches.forEach(b => { const o=document.createElement('option'); o.value=b; o.textContent=b; fB.appendChild(o); });
 }
 
-// ---- FILTER ----
+// ---- APPLY FILTER ----
 function applyFilter() {
+  if (!validateDates()) return;
+
   const tglMulai = document.getElementById('fTglMulai').value;
   const tglAkhir = document.getElementById('fTglAkhir').value;
   const region   = document.getElementById('fRegion').value;
   const entity   = document.getElementById('fEntity').value;
   const branch   = document.getElementById('fBranch').value;
-
   lastFilter = { tglMulai, tglAkhir, region, entity, branch };
 
-  // Filter master aktif
+  const today = getLocalDateStr();
+  const tglList = getDateRange(tglMulai, tglAkhir);
+
+  // Master aktif
   let master = allMaster.filter(m => m.status === 'Aktif');
   if (region) master = master.filter(m => m.region === region);
   if (entity) master = master.filter(m => m.entity === entity);
   if (branch) master = master.filter(m => m.branch === branch);
-  const totalUser = master.length;
 
-  // Filter absensi
+  // Absensi dalam range
   let absensi = allData.filter(a => {
-    const tgl = parseTgl(a.tanggal);
-    if (tglMulai && tgl < tglMulai) return false;
-    if (tglAkhir && tgl > tglAkhir) return false;
+    const t = parseTgl(a.tanggal);
+    if (tglMulai && t < tglMulai) return false;
+    if (tglAkhir && t > tglAkhir) return false;
     if (region && a.region !== region) return false;
     if (entity && a.entity !== entity) return false;
     if (branch && a.branch !== branch) return false;
     return true;
   });
 
-  // Filter izin
+  // Izin dalam range
   let izin = allIzin.filter(a => {
-    const tgl = parseTgl(a.tanggal);
-    if (tglMulai && tgl < tglMulai) return false;
-    if (tglAkhir && tgl > tglAkhir) return false;
+    const t = parseTgl(a.tanggal);
+    if (tglMulai && t < tglMulai) return false;
+    if (tglAkhir && t > tglAkhir) return false;
     if (branch && a.branch !== branch) return false;
     return true;
   });
 
-  const hadirIds = new Set(absensi.map(a => a.id));
-  const izinIds  = new Set(izin.map(a => a.id));
-  const totalHadir = hadirIds.size;
-  const totalIzin  = izinIds.size;
+  // ---- KPI HARI BERJALAN (selalu hari ini) ----
+  const todayStr = today.split('-').reverse().join('/');
+  const hadirHariIni = allData.filter(a => {
+    if (parseTgl(a.tanggal) !== today) return false;
+    if (region && a.region !== region) return false;
+    if (entity && a.entity !== entity) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+  const izinHariIni = allIzin.filter(a => {
+    if (parseTgl(a.tanggal) !== today) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+  const hadirSet  = new Set(hadirHariIni.map(a => a.id));
+  const izinSet   = new Set(izinHariIni.map(a => a.id));
+  const belumHari = master.filter(m => !hadirSet.has(m.id) && !izinSet.has(m.id));
 
-  // Hitung unique user yang tidak hadir sama sekali di range ini
-  const belumSet = master.filter(m => !hadirIds.has(m.id) && !izinIds.has(m.id));
-  const totalAbsen = belumSet.length;
-  const pct = totalUser > 0 ? Math.round((totalHadir / totalUser) * 100) : 0;
+  // Hitung belumAbsenData untuk modal (hari ini)
+  belumAbsenData = belumHari.map(m => ({
+    tanggal: todayStr, id: m.id, nama: m.nama, region: m.region, entity: m.entity, branch: m.branch
+  }));
 
-  document.getElementById('kTotal').textContent = totalUser;
-  document.getElementById('kHadir').textContent = absensi.length;
-  document.getElementById('kIzin').textContent  = izin.length;
-  document.getElementById('kAbsen').textContent = totalAbsen;
-  document.getElementById('kPct').textContent   = pct + '%';
+  const hPct = master.length > 0 ? Math.round((hadirSet.size / master.length) * 100) : 0;
+  document.getElementById('badgeHari').textContent = todayStr + ' — Hari ini';
+  document.getElementById('hTotal').textContent = master.length;
+  document.getElementById('hHadir').textContent = hadirSet.size;
+  document.getElementById('hIzin').textContent  = izinSet.size;
+  document.getElementById('hBelum').textContent = belumHari.length;
+  document.getElementById('hPct').textContent   = hPct + '%';
 
-  renderCharts(absensi, izin);
+  // ---- KPI STATISTIK RANGE ----
+  const rHadir    = absensi.length;
+  const rIzin     = izin.filter(a => (a.jenisIzin||'Izin') === 'Izin').length;
+  const rSakit    = izin.filter(a => a.jenisIzin === 'Sakit').length;
+  const rCuti     = izin.filter(a => a.jenisIzin === 'Cuti').length;
+  const rIzinAll  = izin.length;
+  const rPct      = (rHadir + rIzinAll) > 0 ? Math.round((rHadir / (rHadir + rIzinAll)) * 100) : 0;
 
+  document.getElementById('badgeRange').textContent = formatTgl(tglMulai) + ' — ' + formatTgl(tglAkhir) + ' · ' + tglList.length + ' hari';
+  document.getElementById('rHadir').textContent    = rHadir;
+  document.getElementById('rIzin').textContent     = rIzin;
+  document.getElementById('rSakitCuti').textContent = rSakit + rCuti;
+  document.getElementById('rPct').textContent      = rPct + '%';
+
+  // ---- CHARTS ----
+  renderCharts(absensi, izin, tglList);
+
+  // ---- TABEL — filter status checklist ----
+  // Belum absen per hari dalam range
+  const belumRangeRows = [];
+  tglList.forEach(tglIso => {
+    const tglId = tglIso.split('-').reverse().join('/');
+    const hSet = new Set(allData.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id));
+    const iSet = new Set(allIzin.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id));
+    master.forEach(m => {
+      if (!hSet.has(m.id) && !iSet.has(m.id))
+        belumRangeRows.push({tanggal:tglId,id:m.id,nama:m.nama,region:m.region,entity:m.entity,branch:m.branch,jamMasuk:'—',jamKeluar:'—',zona:'—',tipe:'Belum Absen'});
+    });
+  });
   const combined = [
     ...absensi.map(a => ({...a, tipe:'Hadir'})),
-    ...izin.map(a => ({...a, jamMasuk:'—', jamKeluar:'—', tipe: a.jenisIzin || 'Izin'}))
-  ].sort((a,b) => parseTgl(b.tanggal).localeCompare(parseTgl(a.tanggal)));
+    ...izin.map(a => {
+      const m = allMaster.find(u => u.id === a.id) || {};
+      return {...a, region: m.region||a.region||'—', entity: m.entity||a.entity||'—', jamMasuk:'—', jamKeluar:'—', tipe: a.jenisIzin||'Izin'};
+    }),
+    ...(activeStatus.has('Belum Absen') ? belumRangeRows : [])
+  ].filter(d => activeStatus.has(d.tipe))
+   .sort((a,b) => parseTgl(b.tanggal).localeCompare(parseTgl(a.tanggal)));
 
-  renderTable(combined);
-  document.getElementById('tableCount').textContent = combined.length + ' data';
+  tableData = combined;
+  curPage = 1;
+  renderTable();
+}
+
+// ---- CHARTS ----
+function renderCharts(absensi, izin, tglList) {
+  const labels = tglList.map(t => { const p=t.split('-'); return p[2]+'/'+p[1]; });
+
+  const byTgl = {};
+  tglList.forEach(t => { byTgl[t] = {Hadir:0, Izin:0, Sakit:0, Cuti:0}; });
+  absensi.forEach(a => { const t=parseTgl(a.tanggal); if(byTgl[t]) byTgl[t].Hadir++; });
+  izin.forEach(a => {
+    const t = parseTgl(a.tanggal);
+    const j = a.jenisIzin||'Izin';
+    if (byTgl[t] && byTgl[t][j] !== undefined) byTgl[t][j]++;
+    else if (byTgl[t]) byTgl[t].Izin++;
+  });
+
+  const statusList = [...activeStatus].filter(s => s !== 'Tidak Hadir');
+  const datasets = statusList.map(s => ({
+    label: s,
+    data: tglList.map(t => byTgl[t][s]||0),
+    borderColor: S_COLOR[s].line,
+    backgroundColor: S_COLOR[s].bg,
+    borderWidth: 2,
+    pointRadius: tglList.length <= 14 ? 3 : 1,
+    pointHoverRadius: 5,
+    fill: statusList.length === 1,
+    tension: 0.35,
+  }));
+
+  document.getElementById('chartTrenSub').textContent =
+    statusList.length === 4 ? 'Semua status · ' + tglList.length + ' hari'
+    : statusList.join(', ') + ' · ' + tglList.length + ' hari';
+
+  if (chartTren) chartTren.destroy();
+  chartTren = new Chart(document.getElementById('chartTren').getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      plugins: {
+        legend: { display: statusList.length > 1, position:'top', labels:{ font:{size:11}, color:'#888', padding:10, boxWidth:12 } },
+        tooltip: { mode:'index', intersect:false }
+      },
+      scales: {
+        y: { beginAtZero:true, ticks:{ font:{size:10}, color:'#888', stepSize:1 }, grid:{ color:'rgba(0,0,0,.05)' } },
+        x: { ticks:{ font:{size:9}, color:'#888', maxRotation:45, maxTicksLimit:16 }, grid:{ display:false } }
+      },
+      interaction: { mode:'nearest', axis:'x', intersect:false },
+      animation: { duration:400 }
+    }
+  });
+
+  // PIE CHART — 4 slice ikut checklist
+  const pieAll = [
+    { label:'Hadir', val:absensi.length,                                              color:'#1e8449' },
+    { label:'Izin',  val:izin.filter(a=>(a.jenisIzin||'Izin')==='Izin').length,      color:'#1a6fc4' },
+    { label:'Sakit', val:izin.filter(a=>a.jenisIzin==='Sakit').length,               color:'#d68910' },
+    { label:'Cuti',  val:izin.filter(a=>a.jenisIzin==='Cuti').length,                color:'#6c3483' },
+  ];
+  const pieF = pieAll.filter(p => activeStatus.has(p.label) && p.val > 0);
+  const pL = pieF.length ? pieF.map(p=>p.label) : ['Tidak ada data'];
+  const pD = pieF.length ? pieF.map(p=>p.val)   : [1];
+  const pC = pieF.length ? pieF.map(p=>p.color) : ['#dde1e7'];
+
+  document.getElementById('chartStatusSub').textContent = 'Berdasarkan range & filter aktif';
+  if (chartStatus) chartStatus.destroy();
+  chartStatus = new Chart(document.getElementById('chartStatus').getContext('2d'), {
+    type: 'doughnut',
+    data: { labels:pL, datasets:[{ data:pD, backgroundColor:pC, borderWidth:0, hoverOffset:4 }] },
+    options: {
+      cutout: '60%',
+      plugins: { legend:{ position:'bottom', labels:{ font:{size:11}, color:'#888', padding:8, boxWidth:10 } } },
+      animation: { duration:400 }
+    }
+  });
+}
+
+// ---- RENDER TABLE + PAGINATION ----
+function renderTable() {
+  const total = tableData.length;
+  const totalPage = Math.ceil(total / perPage);
+  if (curPage > totalPage) curPage = Math.max(1, totalPage);
+
+  const start = (curPage-1) * perPage;
+  const end   = Math.min(start + perPage, total);
+  const slice = tableData.slice(start, end);
+
+  document.getElementById('tableCount').textContent = total + ' data';
+
+  if (!total) {
+    document.getElementById('tableBody').innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Tidak ada data untuk filter ini</div>';
+    document.getElementById('paginationBar').style.display = 'none';
+    return;
+  }
+
+  const rows = slice.map(d => {
+    const cls = (d.tipe||'').toLowerCase();
+    return `<tr>
+      <td class="mono">${d.tanggal||'—'}</td>
+      <td class="mono">${d.id||'—'}</td>
+      <td>${d.nama||'—'}</td>
+      <td>${d.region||'—'}</td>
+      <td>${d.entity||'—'}</td>
+      <td>${d.branch||'—'}</td>
+      <td class="mono">${d.jamMasuk||'—'}</td>
+      <td class="mono">${d.jamKeluar||'—'}</td>
+      <td><span class="badge ${cls}">${d.tipe||'—'}</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tableBody').innerHTML = `
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th>Tanggal</th><th>ID</th><th>Nama</th>
+        <th>Region</th><th>Entity</th><th>Branch</th>
+        <th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+
+  // Pagination
+  document.getElementById('pgInfo').textContent =
+    'Menampilkan ' + (start+1) + '–' + end + ' dari ' + total + ' data';
+
+  const pgBar = document.getElementById('pgBtns');
+  pgBar.innerHTML = '';
+  const addBtn = (label, page, disabled=false, active=false) => {
+    const b = document.createElement('button');
+    b.className = 'pg-btn' + (active?' active':'');
+    b.textContent = label;
+    b.disabled = disabled;
+    if (!disabled) b.onclick = () => goPage(page);
+    pgBar.appendChild(b);
+  };
+  const addEllipsis = () => {
+    const s = document.createElement('span');
+    s.className = 'pg-ellipsis'; s.textContent = '...';
+    pgBar.appendChild(s);
+  };
+
+  addBtn('← Prev', curPage-1, curPage===1);
+
+  if (totalPage <= 7) {
+    for (let i=1; i<=totalPage; i++) addBtn(i, i, false, i===curPage);
+  } else {
+    addBtn(1, 1, false, curPage===1);
+    if (curPage > 3) addEllipsis();
+    for (let i=Math.max(2,curPage-1); i<=Math.min(totalPage-1,curPage+1); i++) {
+      addBtn(i, i, false, i===curPage);
+    }
+    if (curPage < totalPage-2) addEllipsis();
+    addBtn(totalPage, totalPage, false, curPage===totalPage);
+  }
+
+  addBtn('Next →', curPage+1, curPage===totalPage);
+  document.getElementById('paginationBar').style.display = 'flex';
+}
+
+function goPage(p) { curPage = p; renderTable(); }
+
+function setPerPage(n) {
+  perPage = n; curPage = 1;
+  document.querySelectorAll('.perpage-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.textContent) === n);
+  });
+  renderTable();
+}
+
+// ---- MODAL BELUM ABSEN ----
+function openModal() {
+  const { tglMulai, tglAkhir, region, entity, branch } = lastFilter;
+  const today = getLocalDateStr();
+  const todayStr = today.split('-').reverse().join('/');
+
+  const tags = [todayStr + ' (Hari ini)'];
+  if (region) tags.push(region); else tags.push('Semua Region');
+  if (entity) tags.push(entity);
+  if (branch) tags.push(branch); else tags.push('Semua Branch');
+
+  document.getElementById('modalTags').innerHTML = tags.map(t=>`<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalCount').textContent = belumAbsenData.length + ' belum absen';
+  document.getElementById('modalSub').textContent = 'Salesman tanpa keterangan · ' + todayStr;
+  document.getElementById('modalFootInfo').textContent = belumAbsenData.length + ' user dari ' + allMaster.filter(m=>m.status==='Aktif').length + ' user aktif';
+
+  if (!belumAbsenData.length) {
+    document.getElementById('modalBody').innerHTML = '<div class="empty"><div class="empty-icon">🎉</div>Semua user sudah absen hari ini!</div>';
+  } else {
+    const rows = belumAbsenData.map((r,i) => `<tr>
+      <td style="color:var(--text-l);font-size:12px;">${i+1}</td>
+      <td class="mono">${r.tanggal}</td>
+      <td class="mono">${r.id}</td>
+      <td>${r.nama}</td>
+      <td>${r.region}</td>
+      <td>${r.entity}</td>
+      <td>${r.branch}</td>
+    </tr>`).join('');
+    document.getElementById('modalBody').innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>No</th><th>Tanggal</th><th>ID</th><th>Nama</th><th>Region</th><th>Entity</th><th>Branch</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+  }
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+
+function closeModal() { document.getElementById('modalBackdrop').classList.remove('show'); }
+function closeModalBackdrop(e) { if (e.target===document.getElementById('modalBackdrop')) closeModal(); }
+
+// ---- EXPORT EXCEL (tabel detail) ----
+function exportExcel() {
+  if (!tableData.length) { alert('Tidak ada data untuk diexport.'); return; }
+  const { tglMulai, tglAkhir } = lastFilter;
+  const rows = tableData.map(d => ({
+    Tanggal      : d.tanggal,
+    'ID Karyawan': d.id,
+    Nama         : d.nama,
+    Region       : d.region||'—',
+    Entity       : d.entity||'—',
+    Branch       : d.branch||'—',
+    'Jam Masuk'  : d.jamMasuk||'—',
+    'Jam Keluar' : d.jamKeluar||'—',
+    Zona         : d.zona||'—',
+    Status       : d.tipe||'—',
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Absensi');
+  XLSX.writeFile(wb, 'Absensi_HOA_' + tglMulai + '_sd_' + tglAkhir + '.xlsx');
+}
+
+// ---- EXPORT EXCEL (modal belum absen) ----
+function exportExcelModal() {
+  if (!belumAbsenData.length) return;
+  const today = getLocalDateStr();
+  const rows = belumAbsenData.map(r => ({
+    Tanggal      : r.tanggal,
+    'ID Karyawan': r.id,
+    Nama         : r.nama,
+    Region       : r.region,
+    Entity       : r.entity,
+    Branch       : r.branch,
+    Status       : 'Belum Absen',
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Belum Absen');
+  XLSX.writeFile(wb, 'BelumAbsen_HOA_' + today + '.xlsx');
+}
+
+// ---- HELPERS ----
+function getLocalDateStr() {
+  const n = new Date();
+  const y = n.getFullYear();
+  const m = String(n.getMonth()+1).padStart(2,'0');
+  const d = String(n.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+d;
 }
 
 function parseTgl(tgl) {
@@ -447,231 +915,25 @@ function parseTgl(tgl) {
   return tgl;
 }
 
-// ---- CHARTS ----
-function renderCharts(absensi, izin) {
-  const tglMap = {};
-  absensi.forEach(a => { tglMap[a.tanggal] = (tglMap[a.tanggal]||0)+1; });
-  const tglKeys = Object.keys(tglMap).sort((a,b)=>parseTgl(a).localeCompare(parseTgl(b)));
-  const tglVals = tglKeys.map(k=>tglMap[k]);
-
-  if (chartTren) chartTren.destroy();
-  chartTren = new Chart(document.getElementById('chartTren').getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: tglKeys,
-      datasets: [{ label:'Hadir', data:tglVals, backgroundColor:'#1a6fc4CC', borderRadius:4, borderSkipped:false }]
-    },
-    options: {
-      plugins: { legend:{ display:false } },
-      scales: {
-        y: { ticks:{ font:{size:10}, color:'#888', stepSize:1 }, grid:{ color:'rgba(0,0,0,.05)' } },
-        x: { ticks:{ font:{size:9}, color:'#888', maxRotation:45 }, grid:{ display:false } }
-      },
-      animation: { duration:500 }
-    }
-  });
-
-  if (chartStatus) chartStatus.destroy();
-  chartStatus = new Chart(document.getElementById('chartStatus').getContext('2d'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Hadir','Izin/Sakit/Cuti'],
-      datasets: [{ data:[absensi.length, izin.length], backgroundColor:['#1e8449','#d68910'], borderWidth:0, hoverOffset:4 }]
-    },
-    options: {
-      cutout: '65%',
-      plugins: { legend:{ position:'bottom', labels:{ font:{size:11}, color:'#888', padding:10 } } },
-      animation: { duration:500 }
-    }
-  });
-}
-
-// ---- TABLE ----
-function renderTable(data) {
-  if (data.length === 0) {
-    document.getElementById('tableBody').innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Tidak ada data untuk filter ini</div>';
-    return;
-  }
-  const rows = data.map(d => `
-    <tr>
-      <td class="mono">${d.tanggal||'—'}</td>
-      <td class="mono">${d.id||'—'}</td>
-      <td>${d.nama||'—'}</td>
-      <td>${d.region||'—'}</td>
-      <td>${d.entity||'—'}</td>
-      <td>${d.branch||'—'}</td>
-      <td class="mono">${d.jamMasuk||'—'}</td>
-      <td class="mono">${d.jamKeluar||'—'}</td>
-      <td><span class="badge ${(d.tipe||'').toLowerCase()}">${d.tipe||'—'}</span></td>
-    </tr>`).join('');
-  document.getElementById('tableBody').innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Tanggal</th><th>ID</th><th>Nama</th>
-          <th>Region</th><th>Entity</th><th>Branch</th>
-          <th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-}
-
-// ---- MODAL BELUM ABSEN ----
-function openModalBelumAbsen() {
-  const { tglMulai, tglAkhir, region, entity, branch } = lastFilter;
-
-  // Filter master aktif sesuai filter bar
-  let master = allMaster.filter(m => m.status === 'Aktif');
-  if (region) master = master.filter(m => m.region === region);
-  if (entity) master = master.filter(m => m.entity === entity);
-  if (branch) master = master.filter(m => m.branch === branch);
-
-  // Ambil semua tanggal unik dalam range
-  const tglList = getDateRange(tglMulai, tglAkhir);
-
-  // Untuk setiap tanggal, cari siapa yang tidak absen & tidak izin
-  const rows = [];
-  tglList.forEach(tglIso => {
-    const tglId = tglIso.split('-').reverse().join('/');
-
-    const hadirPadaTgl = new Set(
-      allData.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id)
-    );
-    const izinPadaTgl = new Set(
-      allIzin.filter(a => parseTgl(a.tanggal) === tglIso).map(a => a.id)
-    );
-
-    master.forEach(m => {
-      if (!hadirPadaTgl.has(m.id) && !izinPadaTgl.has(m.id)) {
-        rows.push({ tanggal: tglId, id: m.id, nama: m.nama, region: m.region, entity: m.entity, branch: m.branch });
-      }
-    });
-  });
-
-  // Urutkan by tanggal terbaru dulu
-  rows.sort((a,b) => parseTgl(b.tanggal).localeCompare(parseTgl(a.tanggal)));
-  belumAbsenData = rows;
-
-  // Update modal filter tags
-  const tags = [];
-  if (tglMulai && tglAkhir) tags.push(formatTglDisplay(tglMulai) + ' — ' + formatTglDisplay(tglAkhir));
-  if (region) tags.push(region); else tags.push('Semua Region');
-  if (entity) tags.push(entity);
-  if (branch) tags.push(branch); else tags.push('Semua Branch');
-
-  document.getElementById('modalFilterTags').innerHTML = tags.map(t =>
-    `<span class="modal-tag">${t}</span>`).join('');
-  document.getElementById('modalCount').textContent = rows.length + ' data belum absen';
-  document.getElementById('modalSubTitle').textContent =
-    'Salesman tanpa keterangan · ' + formatTglDisplay(tglMulai) + ' s/d ' + formatTglDisplay(tglAkhir);
-  document.getElementById('modalFootInfo').textContent = rows.length + ' total baris dari ' + tglList.length + ' hari × ' + master.length + ' user';
-
-  // Render tabel modal
-  if (rows.length === 0) {
-    document.getElementById('modalTableBody').innerHTML =
-      '<div class="empty"><div class="empty-icon">🎉</div>Semua user sudah absen di periode ini!</div>';
-  } else {
-    const tblRows = rows.map((r, i) => `
-      <tr>
-        <td style="color:var(--text-l);font-size:12px;">${i+1}</td>
-        <td class="mono">${r.tanggal}</td>
-        <td class="mono">${r.id}</td>
-        <td>${r.nama}</td>
-        <td>${r.region}</td>
-        <td>${r.entity}</td>
-        <td>${r.branch}</td>
-      </tr>`).join('');
-    document.getElementById('modalTableBody').innerHTML = `
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th>No</th><th>Tanggal</th><th>ID</th><th>Nama</th>
-            <th>Region</th><th>Entity</th><th>Branch</th>
-          </tr></thead>
-          <tbody>${tblRows}</tbody>
-        </table>
-      </div>`;
-  }
-
-  document.getElementById('modalBackdrop').classList.add('show');
-}
-
-function closeModal() {
-  document.getElementById('modalBackdrop').classList.remove('show');
-}
-
-function closeModalOnBackdrop(e) {
-  if (e.target === document.getElementById('modalBackdrop')) closeModal();
-}
-
-// ---- HELPER: generate date range ----
-function getDateRange(tglMulai, tglAkhir) {
-  if (!tglMulai || !tglAkhir) return [];
-  const dates = [];
-  const start = new Date(tglMulai);
-  const end   = new Date(tglAkhir);
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
+function getDateRange(s, e) {
+  if (!s||!e) return [];
+  const dates=[], start=new Date(s), end=new Date(e);
+  for (let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
+    const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
     dates.push(y+'-'+m+'-'+dd);
   }
   return dates;
 }
 
-function formatTglDisplay(tglIso) {
-  if (!tglIso) return '—';
-  const p = tglIso.split('-');
+function formatTgl(iso) {
+  if (!iso) return '—';
+  const p = iso.split('-');
   return p[2]+'/'+p[1]+'/'+p[0];
 }
 
-// ---- EXPORT EXCEL (main) ----
-function exportExcel() {
-  const { tglMulai, tglAkhir, region, entity, branch } = lastFilter;
-  let absensi = allData.filter(a => {
-    const tgl = parseTgl(a.tanggal);
-    if (tglMulai && tgl < tglMulai) return false;
-    if (tglAkhir && tgl > tglAkhir) return false;
-    if (region && a.region !== region) return false;
-    if (entity && a.entity !== entity) return false;
-    if (branch && a.branch !== branch) return false;
-    return true;
-  });
-  let izin = allIzin.filter(a => {
-    const tgl = parseTgl(a.tanggal);
-    if (tglMulai && tgl < tglMulai) return false;
-    if (tglAkhir && tgl > tglAkhir) return false;
-    if (branch && a.branch !== branch) return false;
-    return true;
-  });
-  const combined = [
-    ...absensi.map(a => ({ Tanggal:a.tanggal, 'ID Karyawan':a.id, Nama:a.nama, Region:a.region, Entity:a.entity, Branch:a.branch, 'Jam Masuk':a.jamMasuk, 'Jam Keluar':a.jamKeluar, Zona:a.zona||'—', Status:'Hadir' })),
-    ...izin.map(a => ({ Tanggal:a.tanggal, 'ID Karyawan':a.id, Nama:a.nama, Region:'—', Entity:'—', Branch:a.branch, 'Jam Masuk':'—', 'Jam Keluar':'—', Zona:'—', Status:a.jenisIzin||'Izin' }))
-  ].sort((a,b) => parseTgl(b.Tanggal).localeCompare(parseTgl(a.Tanggal)));
-  const ws = XLSX.utils.json_to_sheet(combined);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Absensi');
-  XLSX.writeFile(wb, 'Absensi_HOA_'+tglMulai+'_sd_'+tglAkhir+'.xlsx');
-}
-
-// ---- EXPORT EXCEL (modal belum absen) ----
-function exportExcelBelumAbsen() {
-  if (!belumAbsenData.length) return;
-  const { tglMulai, tglAkhir } = lastFilter;
-  const rows = belumAbsenData.map(r => ({
-    Tanggal: r.tanggal, 'ID Karyawan': r.id, Nama: r.nama,
-    Region: r.region, Entity: r.entity, Branch: r.branch, Status: 'Belum Absen'
-  }));
-  const ws = XLSX.utils.json_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Belum Absen');
-  XLSX.writeFile(wb, 'BelumAbsen_HOA_'+tglMulai+'_sd_'+tglAkhir+'.xlsx');
-}
-
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') doLogin();
+  if (e.key==='Escape') closeModal();
+  if (e.key==='Enter' && document.getElementById('loginWrap').style.display!=='none') doLogin();
 });
 </script>
 </body>
