@@ -589,7 +589,7 @@ function flipCamera() {
 function capturePhoto() {
   const v = document.getElementById('videoEl');
   const c = document.getElementById('canvas');
-  c.width = 400; c.height = 400;
+  c.width = 300; c.height = 300;
   const ctx = c.getContext('2d');
   if (facingMode === 'user') { ctx.translate(c.width,0); ctx.scale(-1,1); }
   const size = Math.min(v.videoWidth, v.videoHeight);
@@ -612,7 +612,7 @@ function capturePhoto() {
   ctx.fillText(user ? user.id + ' · ' + user.branch : '', 12, 380);
   ctx.fillText(ts, 12, 396);
 
-  const b64 = c.toDataURL('image/jpeg', 0.5);
+  const b64 = c.toDataURL('image/jpeg', 0.3);
   closeCamera();
   if (camResolve) { camResolve(b64); camResolve = null; }
 }
