@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin — Absensi HOA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --blue:#0a3d62;--blue-m:#1a6fc4;--blue-l:#e8f4fd;
+  --green:#1e8449;--green-l:#eafaf1;
+  --amber:#d68910;--amber-l:#fef9e7;
+  --red:#c0392b;--red-l:#fdedec;
+  --purple:#6c3483;--purple-l:#f5eef8;
+  --border:#dde1e7;--white:#fff;
+  --text:#1a252f;--text-m:#5d6d7e;--text-l:#aab7b8;
+  --gray-l:#f4f6f7;--sidebar:220px;
+  --radius:12px;--radius-s:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f3f7;color:var(--text);font-size:14px}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a3d62 0%,#1557a0 100%);padding:20px}
+.login-box{background:var(--white);border-radius:20px;padding:36px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-badge{width:56px;height:56px;background:var(--blue);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:12px;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+.login-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--text-m)}
+.f-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;margin-top:14px}
+.f-input{width:100%;padding:11px 14px;border-radius:var(--radius-s);border:1.5px solid var(--border);font-family:inherit;font-size:14px;color:var(--text);background:var(--gray-l);outline:none;transition:border-color .15s}
+.f-input:focus{border-color:var(--blue-m);background:#fff}
+.btn-login{width:100%;padding:13px;border-radius:var(--radius-s);border:none;background:var(--blue);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:20px}
+.btn-login:hover{opacity:.9}
+.login-err{background:var(--red-l);color:var(--red);border-radius:var(--radius-s);padding:10px 14px;font-size:13px;margin-top:14px;display:none;border:1px solid #f5b7b1}
+.login-err.show{display:block}
+
+/* APP */
+.app{display:none;min-height:100vh;flex-direction:column}
+.app.show{display:flex}
+
+/* TOP NAV */
+.topnav{background:var(--blue);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topnav-left{display:flex;align-items:center;gap:12px}
+.topnav-logo{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.topnav-sub{font-size:11px;opacity:.65}
+.topnav-right{display:flex;align-items:center;gap:16px}
+.topnav-admin{font-size:13px;opacity:.8}
+.btn-logout-top{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
+
+/* MAIN CONTENT */
+.main{flex:1;padding:24px;overflow-y:auto}
+
+/* FILTER BAR */
+.filter-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border);margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:5px;min-width:130px;flex:1}
+.filter-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
+.filter-select,.filter-input{padding:8px 12px;border-radius:var(--radius-s);border:1.5px solid var(--border);font-family:inherit;font-size:13px;color:var(--text);background:var(--gray-l);outline:none;width:100%}
+.filter-select:focus,.filter-input:focus{border-color:var(--blue-m)}
+.btn-filter{padding:9px 20px;border-radius:var(--radius-s);border:none;background:var(--blue);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end;white-space:nowrap}
+.btn-export{padding:9px 20px;border-radius:var(--radius-s);border:1.5px solid var(--green);background:transparent;color:var(--green);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end;white-space:nowrap}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px}
+.kpi-card{background:var(--white);border-radius:var(--radius);padding:16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-card.blue::before{background:var(--blue-m)}
+.kpi-card.green::before{background:var(--green)}
+.kpi-card.amber::before{background:var(--amber)}
+.kpi-card.red::before{background:var(--red)}
+.kpi-card.purple::before{background:var(--purple)}
+.kpi-label{font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:-1px;line-height:1}
+.kpi-sub{font-size:11px;color:var(--text-l);margin-top:6px}
+.kpi-card.blue .kpi-value{color:var(--blue-m)}
+.kpi-card.green .kpi-value{color:var(--green)}
+.kpi-card.amber .kpi-value{color:var(--amber)}
+.kpi-card.red .kpi-value{color:var(--red)}
+.kpi-card.purple .kpi-value{color:var(--purple)}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:768px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--white);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border)}
+.chart-title{font-size:13px;font-weight:600;color:var(--text-m);margin-bottom:14px;text-transform:uppercase;letter-spacing:.4px}
+
+/* TABLE */
+.table-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.table-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.table-title{font-size:13px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px}
+.table-count{font-size:12px;color:var(--text-l)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--gray-l)}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr:hover{background:#fafbfc}
+tbody tr:last-child td{border:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge.hadir{background:var(--green-l);color:var(--green)}
+.badge.izin,.badge.sakit,.badge.cuti{background:var(--amber-l);color:var(--amber)}
+.badge.absen{background:var(--red-l);color:var(--red)}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--text-l)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px;color:var(--text-l)}
+.empty-icon{font-size:32px;margin-bottom:8px}
+
+@media(max-width:600px){
+  .main{padding:14px}
+  .filter-bar{flex-direction:column}
+  .filter-group{min-width:100%}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-badge">HOA</div>
+      <div class="login-title">Dashboard Admin</div>
+      <div class="login-sub">Absensi HOA — Monitoring Salesman</div>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <label class="f-label">Username</label>
+    <input class="f-input" id="inputUser" type="text" placeholder="administrator" autocomplete="off">
+    <label class="f-label">Password</label>
+    <input class="f-input" id="inputPass" type="password" placeholder="••••••••">
+    <button class="btn-login" onclick="doLogin()">Masuk ke Dashboard</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appWrap">
+  <!-- TOP NAV -->
+  <div class="topnav">
+    <div class="topnav-left">
+      <div>
+        <div class="topnav-logo">Absensi HOA — Dashboard Admin</div>
+        <div class="topnav-sub">Monitoring Kehadiran Salesman</div>
+      </div>
+    </div>
+    <div class="topnav-right">
+      <div class="topnav-admin" id="adminName">Administrator</div>
+      <button class="btn-logout-top" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="filter-label">Tanggal Mulai</div>
+        <input class="filter-input" type="date" id="fTglMulai">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Tanggal Akhir</div>
+        <input class="filter-input" type="date" id="fTglAkhir">
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Region</div>
+        <select class="filter-select" id="fRegion">
+          <option value="">Semua Region</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Entity</div>
+        <select class="filter-select" id="fEntity">
+          <option value="">Semua Entity</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">Branch</div>
+        <select class="filter-select" id="fBranch">
+          <option value="">Semua Branch</option>
+        </select>
+      </div>
+      <button class="btn-filter" onclick="applyFilter()">Tampilkan</button>
+      <button class="btn-export" onclick="exportExcel()">Download Excel</button>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi-card blue">
+        <div class="kpi-label">Total User</div>
+        <div class="kpi-value" id="kTotal">—</div>
+        <div class="kpi-sub">Terdaftar aktif</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Total Hadir</div>
+        <div class="kpi-value" id="kHadir">—</div>
+        <div class="kpi-sub">Check-in periode ini</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-label">Total Izin</div>
+        <div class="kpi-value" id="kIzin">—</div>
+        <div class="kpi-sub">Izin/Sakit/Cuti</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Tidak Hadir</div>
+        <div class="kpi-value" id="kAbsen">—</div>
+        <div class="kpi-sub">Tanpa keterangan</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">% Kehadiran</div>
+        <div class="kpi-value" id="kPct">—</div>
+        <div class="kpi-sub">Dari total hadir wajib</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Tren Kehadiran Harian</div>
+        <canvas id="chartTren" height="120"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Komposisi Status</div>
+        <canvas id="chartStatus" height="120"></canvas>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">Detail Absensi</div>
+        <div class="table-count" id="tableCount">—</div>
+      </div>
+      <div id="tableBody">
+        <div class="loading"><div class="spinner"></div>Memuat data...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbyt4e-yYZ47zEG4tjfT94h9M60th_X-0bKfYhOgIow0zB2odL8R1sF2gsXNwJKm2rywLQ/exec';
+let adminUser = null;
+let allData   = [];
+let allIzin   = [];
+let allMaster = [];
+let chartTren = null;
+let chartStatus = null;
+
+// ---- INIT ----
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('hoa_admin');
+  if (saved) { adminUser = JSON.parse(saved); showApp(); }
+  setDefaultDates();
+});
+
+function setDefaultDates() {
+  const now   = new Date();
+  const y     = now.getFullYear();
+  const m     = String(now.getMonth()+1).padStart(2,'0');
+  const d     = String(now.getDate()).padStart(2,'0');
+  const first = y+'-'+m+'-01';
+  const today = y+'-'+m+'-'+d;
+  document.getElementById('fTglMulai').value = first;
+  document.getElementById('fTglAkhir').value = today;
+}
+
+// ---- LOGIN ----
+async function doLogin() {
+  const user = document.getElementById('inputUser').value.trim();
+  const pass = document.getElementById('inputPass').value.trim();
+  const err  = document.getElementById('loginErr');
+  err.classList.remove('show');
+  if (!user||!pass) { showErr('Lengkapi username dan password'); return; }
+
+  try {
+    const res = await fetch(API_URL+'?action=adminlogin&username='+encodeURIComponent(user)+'&password='+encodeURIComponent(pass));
+    const data = await res.json();
+    if (data.status === 'ok') {
+      adminUser = data.admin;
+      localStorage.setItem('hoa_admin', JSON.stringify(adminUser));
+      showApp();
+    } else {
+      showErr(data.message || 'Username atau password salah');
+    }
+  } catch(e) {
+    showErr('Gagal terhubung ke server');
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('loginErr');
+  el.textContent = msg; el.classList.add('show');
+}
+
+function showApp() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('appWrap').classList.add('show');
+  document.getElementById('adminName').textContent = adminUser.nama || 'Administrator';
+  loadAllData();
+}
+
+function doLogout() {
+  if (!confirm('Yakin ingin keluar?')) return;
+  localStorage.removeItem('hoa_admin');
+  location.reload();
+}
+
+// ---- LOAD DATA ----
+async function loadAllData() {
+  try {
+    const res  = await fetch(API_URL+'?action=dashdata');
+    const data = await res.json();
+    if (data.status === 'ok') {
+      allData   = data.absensi || [];
+      allIzin   = data.izin    || [];
+      allMaster = data.master  || [];
+      populateFilters();
+      applyFilter();
+    }
+  } catch(e) {
+    document.getElementById('tableBody').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Gagal memuat data</div>';
+  }
+}
+
+function populateFilters() {
+  const regions  = [...new Set(allMaster.map(r=>r.region).filter(Boolean))].sort();
+  const entities = [...new Set(allMaster.map(r=>r.entity).filter(Boolean))].sort();
+  const branches = [...new Set(allMaster.map(r=>r.branch).filter(Boolean))].sort();
+
+  const fR = document.getElementById('fRegion');
+  const fE = document.getElementById('fEntity');
+  const fB = document.getElementById('fBranch');
+
+  regions.forEach(r  => { const o=document.createElement('option'); o.value=r; o.textContent=r; fR.appendChild(o); });
+  entities.forEach(e => { const o=document.createElement('option'); o.value=e; o.textContent=e; fE.appendChild(o); });
+  branches.forEach(b => { const o=document.createElement('option'); o.value=b; o.textContent=b; fB.appendChild(o); });
+}
+
+// ---- FILTER & RENDER ----
+function applyFilter() {
+  const tglMulai = document.getElementById('fTglMulai').value;
+  const tglAkhir = document.getElementById('fTglAkhir').value;
+  const region   = document.getElementById('fRegion').value;
+  const entity   = document.getElementById('fEntity').value;
+  const branch   = document.getElementById('fBranch').value;
+
+  // Filter master
+  let master = allMaster.filter(m => m.status === 'Aktif');
+  if (region) master = master.filter(m => m.region === region);
+  if (entity) master = master.filter(m => m.entity === entity);
+  if (branch) master = master.filter(m => m.branch === branch);
+  const totalUser = master.length;
+
+  // Filter absensi
+  let absensi = allData.filter(a => {
+    const tgl = parseTgl(a.tanggal);
+    if (tglMulai && tgl < tglMulai) return false;
+    if (tglAkhir && tgl > tglAkhir) return false;
+    if (region && a.region !== region) return false;
+    if (entity && a.entity !== entity) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+
+  // Filter izin
+  let izin = allIzin.filter(a => {
+    const tgl = parseTgl(a.tanggal);
+    if (tglMulai && tgl < tglMulai) return false;
+    if (tglAkhir && tgl > tglAkhir) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+
+  const totalHadir = absensi.length;
+  const totalIzin  = izin.length;
+  const totalAbsen = Math.max(0, totalUser - totalHadir - totalIzin);
+  const pct        = totalUser > 0 ? Math.round((totalHadir / (totalHadir + totalAbsen + totalIzin || 1)) * 100) : 0;
+
+  // Update KPI
+  document.getElementById('kTotal').textContent = totalUser;
+  document.getElementById('kHadir').textContent = totalHadir;
+  document.getElementById('kIzin').textContent  = totalIzin;
+  document.getElementById('kAbsen').textContent = totalAbsen;
+  document.getElementById('kPct').textContent   = pct + '%';
+
+  // Charts
+  renderCharts(absensi, izin);
+
+  // Table — gabung absensi + izin
+  const combined = [
+    ...absensi.map(a => ({...a, tipe:'Hadir'})),
+    ...izin.map(a => ({...a, jamMasuk:'—', jamKeluar:'—', tipe: a.jenisIzin || 'Izin'}))
+  ].sort((a,b) => parseTgl(b.tanggal).localeCompare(parseTgl(a.tanggal)));
+
+  renderTable(combined);
+  document.getElementById('tableCount').textContent = combined.length + ' data';
+}
+
+function parseTgl(tgl) {
+  if (!tgl) return '';
+  const p = tgl.split('/');
+  if (p.length === 3) return p[2]+'-'+p[1]+'-'+p[0];
+  return tgl;
+}
+
+// ---- CHARTS ----
+function renderCharts(absensi, izin) {
+  // Tren harian
+  const tglMap = {};
+  absensi.forEach(a => { tglMap[a.tanggal] = (tglMap[a.tanggal]||0)+1; });
+  const tglKeys = Object.keys(tglMap).sort((a,b)=>parseTgl(a).localeCompare(parseTgl(b)));
+  const tglVals = tglKeys.map(k=>tglMap[k]);
+
+  if (chartTren) chartTren.destroy();
+  const ctxT = document.getElementById('chartTren').getContext('2d');
+  chartTren = new Chart(ctxT, {
+    type: 'bar',
+    data: {
+      labels: tglKeys,
+      datasets: [{
+        label: 'Hadir',
+        data: tglVals,
+        backgroundColor: '#1a6fc4CC',
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { font:{size:10}, color:'#888', stepSize:1 }, grid: { color:'rgba(0,0,0,.05)' } },
+        x: { ticks: { font:{size:9}, color:'#888', maxRotation:45 }, grid: { display:false } }
+      },
+      animation: { duration: 500 }
+    }
+  });
+
+  // Donut status
+  if (chartStatus) chartStatus.destroy();
+  const ctxS = document.getElementById('chartStatus').getContext('2d');
+  chartStatus = new Chart(ctxS, {
+    type: 'doughnut',
+    data: {
+      labels: ['Hadir','Izin/Sakit/Cuti'],
+      datasets: [{
+        data: [absensi.length, izin.length],
+        backgroundColor: ['#1e8449','#d68910'],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      cutout: '65%',
+      plugins: { legend: { position:'bottom', labels:{ font:{size:11}, color:'#888', padding:10 } } },
+      animation: { duration: 500 }
+    }
+  });
+}
+
+// ---- TABLE ----
+function renderTable(data) {
+  if (data.length === 0) {
+    document.getElementById('tableBody').innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Tidak ada data untuk filter ini</div>';
+    return;
+  }
+
+  const rows = data.map(d => `
+    <tr>
+      <td class="mono">${d.tanggal||'—'}</td>
+      <td class="mono">${d.id||'—'}</td>
+      <td>${d.nama||'—'}</td>
+      <td>${d.region||'—'}</td>
+      <td>${d.entity||'—'}</td>
+      <td>${d.branch||'—'}</td>
+      <td class="mono">${d.jamMasuk||'—'}</td>
+      <td class="mono">${d.jamKeluar||'—'}</td>
+      <td><span class="badge ${(d.tipe||'').toLowerCase()}">${d.tipe||'—'}</span></td>
+    </tr>`).join('');
+
+  document.getElementById('tableBody').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th><th>ID</th><th>Nama</th>
+            <th>Region</th><th>Entity</th><th>Branch</th>
+            <th>Jam Masuk</th><th>Jam Keluar</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ---- EXPORT EXCEL ----
+function exportExcel() {
+  const tglMulai = document.getElementById('fTglMulai').value;
+  const tglAkhir = document.getElementById('fTglAkhir').value;
+  const region   = document.getElementById('fRegion').value;
+  const entity   = document.getElementById('fEntity').value;
+  const branch   = document.getElementById('fBranch').value;
+
+  let absensi = allData.filter(a => {
+    const tgl = parseTgl(a.tanggal);
+    if (tglMulai && tgl < tglMulai) return false;
+    if (tglAkhir && tgl > tglAkhir) return false;
+    if (region && a.region !== region) return false;
+    if (entity && a.entity !== entity) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+
+  let izin = allIzin.filter(a => {
+    const tgl = parseTgl(a.tanggal);
+    if (tglMulai && tgl < tglMulai) return false;
+    if (tglAkhir && tgl > tglAkhir) return false;
+    if (branch && a.branch !== branch) return false;
+    return true;
+  });
+
+  const combined = [
+    ...absensi.map(a => ({
+      Tanggal: a.tanggal, 'ID Karyawan': a.id, Nama: a.nama,
+      Region: a.region, Entity: a.entity, Branch: a.branch,
+      'Jam Masuk': a.jamMasuk, 'Jam Keluar': a.jamKeluar,
+      Zona: a.zona, Status: 'Hadir'
+    })),
+    ...izin.map(a => ({
+      Tanggal: a.tanggal, 'ID Karyawan': a.id, Nama: a.nama,
+      Region: '—', Entity: '—', Branch: a.branch,
+      'Jam Masuk': '—', 'Jam Keluar': '—',
+      Zona: '—', Status: a.jenisIzin || 'Izin'
+    }))
+  ].sort((a,b) => parseTgl(b.Tanggal).localeCompare(parseTgl(a.Tanggal)));
+
+  const ws   = XLSX.utils.json_to_sheet(combined);
+  const wb   = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Absensi');
+  const fn   = 'Absensi_HOA_' + tglMulai + '_sd_' + tglAkhir + '.xlsx';
+  XLSX.writeFile(wb, fn);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('loginWrap').style.display !== 'none') doLogin();
+});
+</script>
+</body>
+</html>
