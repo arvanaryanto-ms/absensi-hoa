@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a3d62">
-<title>Absensi Salesman — Cimory SFA</title>
+<title>Absensi HOA</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,27 +21,20 @@
   --border:#dde1e7;--white:#ffffff;
   --text:#1a252f;--text-m:#5d6d7e;--text-l:#aab7b8;
   --radius:16px;--radius-s:10px;--radius-xs:8px;
-  --shadow:0 2px 12px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:#f0f3f7;color:var(--text)}
-
 #app{height:100vh;display:flex;flex-direction:column;max-width:430px;margin:0 auto;background:var(--white);position:relative;overflow:hidden}
 
-/* HEADER */
 .header{background:var(--blue);color:#fff;padding:env(safe-area-inset-top,10px) 20px 20px;flex-shrink:0}
 .header-top{display:flex;justify-content:space-between;align-items:center;padding-top:10px}
-.header-logo{display:flex;align-items:center;gap:8px}
-.header-logo-dot{width:8px;height:8px;border-radius:50%;background:#1a6fc4}
 .header-title{font-size:17px;font-weight:600;letter-spacing:-.3px}
 .header-clock{font-family:'DM Mono',monospace;font-size:13px;opacity:.8}
 .header-sub{font-size:12px;opacity:.65;margin-top:4px}
 
-/* PAGES */
 .page{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 90px;display:none}
 .page.active{display:block}
 
-/* USER CARD */
 .user-card{background:linear-gradient(135deg,var(--blue) 0%,#1557a0 100%);border-radius:var(--radius);padding:16px;color:#fff;margin-bottom:14px;position:relative;overflow:hidden}
 .user-card::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.06)}
 .user-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
@@ -51,22 +44,22 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .user-tags{display:flex;gap:6px;flex-wrap:wrap}
 .user-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:11px}
 
-/* STATUS */
 .status-card{border-radius:var(--radius-s);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;border:1px solid}
 .status-card.belum{background:var(--amber-l);border-color:#f9ca74}
 .status-card.masuk{background:var(--green-l);border-color:#a9dfbf}
 .status-card.pulang{background:var(--blue-l);border-color:#aed6f1}
+.status-card.izin{background:#f5eef8;border-color:#d2b4de}
 .s-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .belum .s-dot{background:var(--amber)}
 .masuk .s-dot{background:var(--green)}
-.pulang .s-dot{background:var(--blue-m)}
+.pulang .s-dot,.izin .s-dot{background:#8e44ad}
 .s-label{font-size:13px;font-weight:600}
 .belum .s-label{color:var(--amber)}
 .masuk .s-label{color:var(--green)}
 .pulang .s-label{color:var(--blue)}
+.izin .s-label{color:#8e44ad}
 .s-sub{font-size:11px;color:var(--text-m);margin-top:2px}
 
-/* INFO GRID */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .info-card{background:var(--gray-l);border-radius:var(--radius-s);padding:12px;border:1px solid var(--border)}
 .info-icon{font-size:15px;margin-bottom:5px}
@@ -74,67 +67,51 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .info-val{font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
 .info-sub{font-size:10px;color:var(--text-m);margin-top:2px}
 
-/* SELFIE */
-.selfie-card{background:var(--gray-l);border-radius:var(--radius-s);padding:12px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.selfie-thumb{width:54px;height:54px;border-radius:10px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0}
-.selfie-thumb img{width:100%;height:100%;object-fit:cover}
-.selfie-label{font-size:13px;font-weight:600}
-.selfie-sub{font-size:11px;color:var(--text-m);margin-top:3px}
-.btn-foto{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0}
+.sec-title{font-size:11px;font-weight:600;color:var(--text-l);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
 
-/* BUTTONS */
 .btn-main{width:100%;padding:14px;border-radius:var(--radius-s);border:none;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;letter-spacing:-.2px;transition:opacity .15s}
 .btn-ci{background:var(--blue);color:#fff}
 .btn-co{background:var(--green);color:#fff}
+.btn-izin{background:#8e44ad;color:#fff}
 .btn-disabled{background:var(--gray-l);color:var(--text-l);border:1px solid var(--border);cursor:default}
 .btn-outline{width:100%;padding:12px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:transparent;font-size:14px;font-weight:500;color:var(--text-m);cursor:pointer;font-family:inherit;margin-bottom:8px}
 
-/* SECTION TITLE */
-.sec-title{font-size:11px;font-weight:600;color:var(--text-l);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-
-/* IZIN FORM */
 .form-group{margin-bottom:14px}
 .form-label{font-size:12px;font-weight:600;color:var(--text-m);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.3px}
 .form-select,.form-input,.form-textarea{width:100%;padding:12px 14px;border-radius:var(--radius-xs);border:1.5px solid var(--border);font-family:inherit;font-size:14px;color:var(--text);background:var(--gray-l);outline:none;transition:border-color .15s}
 .form-select:focus,.form-input:focus,.form-textarea:focus{border-color:var(--blue-m);background:#fff}
 .form-textarea{resize:none;height:80px}
 
-/* HISTORY */
 .hist-item{background:var(--gray-l);border-radius:var(--radius-s);padding:12px 14px;border:1px solid var(--border);margin-bottom:8px}
 .hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .hist-date{font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
 .hist-badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600}
 .hist-badge.Hadir{background:var(--green-l);color:var(--green)}
-.hist-badge.Izin,.hist-badge.Sakit,.hist-badge.Cuti{background:var(--amber-l);color:var(--amber)}
-.hist-badge.Absen{background:var(--red-l);color:var(--red)}
+.hist-badge.Izin,.hist-badge.Sakit,.hist-badge.Cuti{background:#f5eef8;color:#8e44ad}
 .hist-bottom{display:flex;gap:16px;align-items:flex-end}
-.hist-time-box .hist-time-label{font-size:10px;color:var(--text-l)}
+.hist-time-label{font-size:10px;color:var(--text-l)}
 .hist-time-val{font-size:13px;font-weight:500;font-family:'DM Mono',monospace}
 .hist-branch{margin-left:auto;font-size:11px;color:var(--text-m);background:var(--white);padding:2px 8px;border-radius:20px;border:1px solid var(--border)}
 
-/* PROFIL */
 .profil-card{background:var(--gray-l);border-radius:var(--radius);padding:20px;border:1px solid var(--border);margin-bottom:14px;text-align:center}
 .profil-avatar{width:64px;height:64px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;margin:0 auto 12px;font-family:'DM Mono',monospace}
 .profil-name{font-size:17px;font-weight:600;margin-bottom:4px}
 .profil-id{font-size:12px;color:var(--text-m);font-family:'DM Mono',monospace}
 .profil-tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}
 .profil-tag{background:var(--blue-l);color:var(--blue);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
-
 .info-list{background:var(--gray-l);border-radius:var(--radius-s);border:1px solid var(--border);overflow:hidden;margin-bottom:14px}
 .info-row-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
 .info-row-item:last-child{border:none}
 .info-row-key{font-size:13px;color:var(--text-m)}
 .info-row-val{font-size:13px;font-weight:500;font-family:'DM Mono',monospace}
-
 .btn-logout{width:100%;padding:14px;border-radius:var(--radius-s);border:1.5px solid var(--red);background:transparent;font-size:15px;font-weight:600;color:var(--red);cursor:pointer;font-family:inherit}
 
-/* SUCCESS OVERLAY */
 .overlay{position:absolute;inset:0;background:var(--white);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
 .overlay.hidden{display:none}
 .overlay-icon{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
 .overlay-icon.ci{background:var(--green-l)}
 .overlay-icon.co{background:var(--blue-l)}
-.overlay-icon.izin{background:var(--amber-l)}
+.overlay-icon.izin{background:#f5eef8}
 @keyframes popIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 .overlay-title{font-size:22px;font-weight:600;margin-bottom:8px;letter-spacing:-.4px}
 .overlay-sub{font-size:13px;color:var(--text-m);margin-bottom:20px;line-height:1.6}
@@ -143,6 +120,19 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .detail-row:last-child{border:none}
 .detail-key{font-size:12px;color:var(--text-m)}
 .detail-val{font-size:12px;font-weight:600;font-family:'DM Mono',monospace}
+
+/* CAMERA */
+.cam-screen{position:absolute;inset:0;background:#000;z-index:300;display:flex;flex-direction:column}
+.cam-screen.hidden{display:none}
+.cam-header{background:#000;padding:16px 20px 12px;text-align:center}
+.cam-header-title{color:#fff;font-size:15px;font-weight:600}
+.cam-header-sub{color:rgba(255,255,255,.6);font-size:12px;margin-top:4px}
+#videoEl{width:100%;flex:1;object-fit:cover}
+.cam-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#000}
+.cam-btn{color:#fff;background:none;border:none;font-size:14px;font-family:inherit;cursor:pointer;padding:8px}
+.cam-capture{width:68px;height:68px;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.3);cursor:pointer;flex-shrink:0}
+.cam-capture:active{transform:scale(.94)}
+#canvas{display:none}
 
 /* LOGIN */
 .login-screen{position:absolute;inset:0;background:var(--blue);z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
@@ -157,35 +147,21 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .login-input{width:100%;padding:13px 14px;border-radius:var(--radius-xs);border:1.5px solid var(--border);font-family:'DM Mono',monospace;font-size:16px;color:var(--text);background:var(--gray-l);outline:none;margin-bottom:14px;transition:border-color .15s;letter-spacing:1px}
 .login-input:focus{border-color:var(--blue-m);background:#fff}
 .login-btn{width:100%;padding:15px;border-radius:var(--radius-xs);border:none;background:var(--blue);color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
-.login-btn:active{opacity:.9}
-.login-error{background:var(--red-l);color:var(--red);border-radius:var(--radius-xs);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none;border:1px solid #f5b7b1}
+.login-error{background:var(--red-l);color:var(--red);border-radius:var(--radius-xs);padding:10px 14px;font-size:13px;margin-bottom:14px;display:none;border:1px solid #f5b7b1;line-height:1.5}
 .login-error.show{display:block}
 
-/* CAMERA */
-#cameraModal{position:absolute;inset:0;background:#000;z-index:300;display:flex;flex-direction:column}
-#cameraModal.hidden{display:none}
-#videoEl{width:100%;flex:1;object-fit:cover}
-.cam-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#000}
-.cam-btn{color:#fff;background:none;border:none;font-size:14px;font-family:inherit;cursor:pointer;padding:8px}
-.cam-capture{width:64px;height:64px;border-radius:50%;background:#fff;border:4px solid rgba(255,255,255,.35);cursor:pointer}
-.cam-capture:active{transform:scale(.95)}
-#canvas{display:none}
-
-/* ALERT */
-.alert-box{position:absolute;top:0;left:0;right:0;z-index:400;padding:14px 16px;font-size:13px;font-weight:500;text-align:center;transform:translateY(-100%);transition:transform .3s}
+.alert-box{position:absolute;top:0;left:0;right:0;z-index:400;padding:14px 16px;font-size:13px;font-weight:500;text-align:center;transform:translateY(-100%);transition:transform .3s;z-index:600}
 .alert-box.show{transform:translateY(0)}
 .alert-box.error{background:var(--red);color:#fff}
 .alert-box.warning{background:var(--amber);color:#fff}
 .alert-box.success{background:var(--green);color:#fff}
 
-/* LOADING */
-.loading-overlay{position:absolute;inset:0;background:rgba(255,255,255,.85);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.loading-overlay{position:absolute;inset:0;background:rgba(255,255,255,.88);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
 .loading-overlay.hidden{display:none}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:13px;color:var(--text-m)}
 
-/* NAV */
 .bottom-nav{display:flex;background:var(--white);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0);flex-shrink:0}
 .nav-item{flex:1;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;font-family:inherit;color:var(--text-l);font-size:10px;font-weight:500}
 .nav-item.active{color:var(--blue)}
@@ -199,10 +175,8 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 <body>
 <div id="app">
 
-  <!-- ALERT -->
   <div class="alert-box" id="alertBox"></div>
 
-  <!-- LOADING -->
   <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text" id="loadingText">Memproses...</div>
@@ -212,7 +186,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
   <div class="login-screen" id="loginScreen">
     <div class="login-top">
       <div class="login-logo">📍</div>
-      <div class="login-brand">Cimory SFA</div>
+      <div class="login-brand">Absensi HOA</div>
       <div class="login-tagline">Sistem Absensi Salesman Lapangan</div>
     </div>
     <div class="login-card">
@@ -229,10 +203,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
   <!-- HEADER -->
   <div class="header">
     <div class="header-top">
-      <div class="header-logo">
-        <div class="header-logo-dot"></div>
-        <div class="header-title">Cimory SFA</div>
-      </div>
+      <div class="header-title">Absensi HOA</div>
       <div class="header-clock" id="clockEl">--:--</div>
     </div>
     <div class="header-sub" id="headerSub">Sistem Absensi Salesman</div>
@@ -252,6 +223,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
         <div class="user-tag" id="tagRegion">-</div>
         <div class="user-tag" id="tagEntity">-</div>
         <div class="user-tag" id="tagBranch">-</div>
+        <div class="user-tag" id="tagZona">-</div>
       </div>
     </div>
 
@@ -279,19 +251,9 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
       </div>
     </div>
 
-    <div class="sec-title">Foto Selfie</div>
-    <div class="selfie-card">
-      <div class="selfie-thumb" id="selfieThumb">📷</div>
-      <div style="flex:1">
-        <div class="selfie-label" id="selfieLabel">Belum ada foto</div>
-        <div class="selfie-sub" id="selfieSub">Foto wajib sebelum absen</div>
-      </div>
-      <button class="btn-foto" onclick="openCamera()">Foto</button>
-    </div>
-
     <button class="btn-main btn-ci" id="btnCI" onclick="doCheckin()">Check-in Sekarang</button>
     <button class="btn-main btn-disabled" id="btnCO" onclick="doCheckout()" disabled>Check-out</button>
-    <button class="btn-outline" onclick="navTo(2,'pageIzin')">Ajukan Izin / Sakit / Cuti</button>
+    <button class="btn-main btn-disabled" id="btnIzin" onclick="navTo(2,'pageIzin')" disabled>Ajukan Izin / Sakit / Cuti</button>
   </div>
 
   <!-- PAGE: RIWAYAT -->
@@ -303,23 +265,31 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
   <!-- PAGE: IZIN -->
   <div class="page" id="pageIzin">
     <div class="sec-title">Ajukan Izin</div>
-    <div class="form-group">
-      <label class="form-label">Jenis</label>
-      <select class="form-select" id="jenisIzin">
-        <option value="Izin">Izin</option>
-        <option value="Sakit">Sakit</option>
-        <option value="Cuti">Cuti</option>
-      </select>
+    <div id="izinLocked" style="display:none">
+      <div class="empty-state">
+        <div class="empty-icon">🔒</div>
+        <div class="empty-text">Anda sudah absen atau mengajukan izin hari ini</div>
+      </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Tanggal</label>
-      <input class="form-input" id="tglIzin" type="date">
+    <div id="izinForm">
+      <div class="form-group">
+        <label class="form-label">Jenis</label>
+        <select class="form-select" id="jenisIzin">
+          <option value="Izin">Izin</option>
+          <option value="Sakit">Sakit</option>
+          <option value="Cuti">Cuti</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tanggal</label>
+        <input class="form-input" id="tglIzin" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Keterangan</label>
+        <textarea class="form-textarea" id="ketIzin" placeholder="Tulis keterangan (opsional)..."></textarea>
+      </div>
+      <button class="btn-main btn-izin" onclick="doIzin()">Kirim Pengajuan</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Keterangan</label>
-      <textarea class="form-textarea" id="ketIzin" placeholder="Tulis keterangan (opsional)..."></textarea>
-    </div>
-    <button class="btn-main btn-ci" onclick="doIzin()">Kirim Pengajuan</button>
   </div>
 
   <!-- PAGE: PROFIL -->
@@ -337,15 +307,19 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
     <div class="info-list">
       <div class="info-row-item">
         <div class="info-row-key">Versi Aplikasi</div>
-        <div class="info-row-val">v1.0.0</div>
+        <div class="info-row-val">v2.0.0</div>
+      </div>
+      <div class="info-row-item">
+        <div class="info-row-key">Zona Waktu</div>
+        <div class="info-row-val" id="profilZona">-</div>
+      </div>
+      <div class="info-row-item">
+        <div class="info-row-key">Device ID</div>
+        <div class="info-row-val" id="profilDevice" style="font-size:10px">-</div>
       </div>
       <div class="info-row-item">
         <div class="info-row-key">Status Akun</div>
         <div class="info-row-val" style="color:var(--green)">Aktif</div>
-      </div>
-      <div class="info-row-item">
-        <div class="info-row-key">Backend</div>
-        <div class="info-row-val">Google Sheets</div>
       </div>
     </div>
     <button class="btn-logout" onclick="doLogout()">Keluar dari Akun</button>
@@ -360,12 +334,16 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
     <button class="btn-main btn-ci" onclick="closeOverlay()" style="width:100%">Kembali ke Beranda</button>
   </div>
 
-  <!-- CAMERA -->
-  <div id="cameraModal" class="hidden">
+  <!-- CAMERA SCREEN -->
+  <div class="cam-screen hidden" id="cameraModal">
+    <div class="cam-header">
+      <div class="cam-header-title" id="camTitle">Foto Selfie</div>
+      <div class="cam-header-sub" id="camSub">Pastikan wajah terlihat jelas</div>
+    </div>
     <video id="videoEl" autoplay playsinline muted></video>
     <canvas id="canvas"></canvas>
     <div class="cam-bar">
-      <button class="cam-btn" onclick="closeCamera()">Batal</button>
+      <button class="cam-btn" onclick="cancelCamera()">Batal</button>
       <button class="cam-capture" onclick="capturePhoto()"></button>
       <button class="cam-btn" onclick="flipCamera()">🔄</button>
     </div>
@@ -381,18 +359,40 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzjcOs5H2CBy4InyFYKNutxnfyalQAVoyLhetHU8RJhfLas8NNpRNS5yaJ-8DKb12uy0g/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxvXtRbkAKFgDCUaJiEpvtVSJR5am-dTZUylCwcObpXjM_18HY5oeu5Z3usyXnJYwE2/exec';
 
 let user = null;
 let gpsLat = null, gpsLng = null, gpsAcc = null;
-let selfieB64 = '';
-let checkedIn = false, checkedOut = false;
+let selfieCI = '', selfieCO = '';
+let checkedIn = false, checkedOut = false, hasIzin = false;
 let ciTime = '', coTime = '';
 let camStream = null, facingMode = 'user';
+let camMode = 'ci'; // 'ci' or 'co'
+let camResolve = null;
+let tzOffset = new Date().getTimezoneOffset();
+let zona = getZonaLocal();
+
+// ---- TIMEZONE ----
+function getZonaLocal() {
+  const off = new Date().getTimezoneOffset();
+  if (off === -540) return 'WIT';
+  if (off === -480) return 'WITA';
+  return 'WIB';
+}
+
+// ---- DEVICE ID ----
+function getDeviceId() {
+  let did = localStorage.getItem('hoa_device_id');
+  if (!did) {
+    did = 'DEV-' + Math.random().toString(36).substr(2,9).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+    localStorage.setItem('hoa_device_id', did);
+  }
+  return did;
+}
 
 // ---- INIT ----
 window.addEventListener('load', () => {
-  const saved = localStorage.getItem('cimory_user');
+  const saved = localStorage.getItem('hoa_user');
   if (saved) { user = JSON.parse(saved); initApp(); }
   updateClock();
   setInterval(updateClock, 1000);
@@ -404,67 +404,112 @@ function registerSW() {
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 
-function initApp() {
+async function initApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   setUserUI();
   startGPS();
-  const today = new Date().toLocaleDateString('id-ID');
-  const ciSaved = localStorage.getItem('cimory_ci_' + today);
-  const coSaved = localStorage.getItem('cimory_co_' + today);
-  if (ciSaved) { checkedIn = true; ciTime = ciSaved; setStatus('masuk','Sudah Check-in','Masuk pukul '+ciTime); disableCI(); enableCO(); }
-  if (coSaved) { checkedOut = true; coTime = coSaved; setStatus('pulang','Sudah Check-out','Pulang pukul '+coTime); disableCO(); }
+  await cekStatusHariIni();
+}
+
+// ---- CEK STATUS HARI INI ----
+async function cekStatusHariIni() {
+  if (!user) return;
+  try {
+    const res = await fetch(API_URL + '?action=cekstatus&id=' + encodeURIComponent(user.id) + '&offset=' + tzOffset);
+    const data = await res.json();
+    if (data.status === 'ok') {
+      if (data.hasIzin) {
+        hasIzin = true;
+        setStatus('izin', 'Sudah Mengajukan ' + data.jenisIzin, 'Tidak bisa absen hari ini');
+        disableCI(); disableCO(); lockIzin();
+      } else if (data.checkedOut) {
+        checkedIn = true; checkedOut = true;
+        ciTime = data.jamMasuk; coTime = data.jamKeluar;
+        setStatus('pulang', 'Sudah Check-out', 'Pulang pukul ' + coTime);
+        disableCI(); disableCO(); lockIzin();
+      } else if (data.checkedIn) {
+        checkedIn = true;
+        ciTime = data.jamMasuk;
+        setStatus('masuk', 'Sudah Check-in', 'Masuk pukul ' + ciTime);
+        disableCI(); enableCO(); lockIzin();
+      } else {
+        enableCI(); disableCO(); enableIzin();
+      }
+    }
+  } catch(e) {
+    // offline — pakai cache lokal
+    const today = new Date().toLocaleDateString('id-ID');
+    const ciSaved = localStorage.getItem('hoa_ci_' + today);
+    const coSaved = localStorage.getItem('hoa_co_' + today);
+    if (ciSaved && coSaved) {
+      checkedIn = true; checkedOut = true; ciTime = ciSaved; coTime = coSaved;
+      setStatus('pulang','Sudah Check-out (Offline)','Pulang pukul '+coTime);
+      disableCI(); disableCO(); lockIzin();
+    } else if (ciSaved) {
+      checkedIn = true; ciTime = ciSaved;
+      setStatus('masuk','Sudah Check-in (Offline)','Masuk pukul '+ciTime);
+      disableCI(); enableCO(); lockIzin();
+    } else {
+      enableCI(); disableCO(); enableIzin();
+    }
+  }
 }
 
 // ---- LOGIN ----
 async function doLogin() {
   const id  = document.getElementById('inputId').value.trim().toUpperCase();
   const pin = document.getElementById('inputPin').value.trim();
+  const err = document.getElementById('loginError');
+  err.classList.remove('show');
   if (!id)  { showLoginError('Masukkan ID Karyawan'); return; }
-  if (!pin) { showLoginError('Masukkan PIN'); return; }
   if (pin.length !== 6) { showLoginError('PIN harus 6 digit'); return; }
 
   showLoading('Memverifikasi...');
   try {
-    const res = await apiPost({ action:'login', id, pin });
+    const res = await apiPost({ action:'login', id, pin, deviceId: getDeviceId() });
     hideLoading();
     if (res.status === 'ok') {
       user = res.user;
-      localStorage.setItem('cimory_user', JSON.stringify(user));
+      localStorage.setItem('hoa_user', JSON.stringify(user));
       initApp();
     } else if (res.status === 'nonaktif') {
-      showLoginError(res.message);
+      showLoginError('🔒 ' + res.message);
+    } else if (res.status === 'device_blocked') {
+      showLoginError('📱 ' + res.message);
     } else {
       showLoginError(res.message);
     }
   } catch(e) {
     hideLoading();
-    showLoginError('Gagal terhubung ke server. Cek koneksi internet.');
+    showLoginError('Gagal terhubung. Cek koneksi internet.');
   }
 }
 
 function showLoginError(msg) {
   const el = document.getElementById('loginError');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
 }
 
-// ---- SET USER UI ----
+// ---- USER UI ----
 function setUserUI() {
   if (!user) return;
   const init = user.nama.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('avatarEl').textContent = init;
-  document.getElementById('userNameEl').textContent = user.nama;
-  document.getElementById('userIdEl').textContent = user.id;
-  document.getElementById('tagRegion').textContent = user.region;
-  document.getElementById('tagEntity').textContent = user.entity;
-  document.getElementById('tagBranch').textContent = user.branch;
-  document.getElementById('headerSub').textContent = user.branch + ' · ' + user.region;
+  document.getElementById('avatarEl').textContent     = init;
+  document.getElementById('userNameEl').textContent   = user.nama;
+  document.getElementById('userIdEl').textContent     = user.id;
+  document.getElementById('tagRegion').textContent    = user.region;
+  document.getElementById('tagEntity').textContent    = user.entity;
+  document.getElementById('tagBranch').textContent    = user.branch;
+  document.getElementById('tagZona').textContent      = zona;
+  document.getElementById('headerSub').textContent    = user.branch + ' · ' + zona;
   document.getElementById('profilAvatar').textContent = init;
-  document.getElementById('profilName').textContent = user.nama;
-  document.getElementById('profilId').textContent = user.id;
+  document.getElementById('profilName').textContent   = user.nama;
+  document.getElementById('profilId').textContent     = user.id;
   document.getElementById('profilRegion').textContent = user.region;
   document.getElementById('profilEntity').textContent = user.entity;
   document.getElementById('profilBranch').textContent = user.branch;
+  document.getElementById('profilZona').textContent   = zona;
+  document.getElementById('profilDevice').textContent = getDeviceId().substring(0,20)+'...';
 }
 
 // ---- CLOCK ----
@@ -472,7 +517,7 @@ function updateClock() {
   const now = new Date();
   const t = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
   const d = now.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'});
-  document.getElementById('clockEl').textContent = t;
+  document.getElementById('clockEl').textContent = t + ' ' + zona;
   document.getElementById('timeEl').textContent  = t;
   document.getElementById('dateEl').textContent  = d;
 }
@@ -481,6 +526,13 @@ function updateClock() {
 function startGPS() {
   if (!navigator.geolocation) { document.getElementById('gpsStatus').textContent = 'Tidak didukung'; return; }
   navigator.geolocation.watchPosition(pos => {
+    if (isMockLocation(pos)) {
+      document.getElementById('gpsStatus').textContent = 'FAKE GPS ✗';
+      document.getElementById('gpsCoord').textContent  = 'Nonaktifkan Fake GPS!';
+      gpsLat = null; gpsLng = null;
+      showAlert('Terdeteksi Fake GPS! Nonaktifkan aplikasi fake GPS.','error');
+      return;
+    }
     gpsLat = pos.coords.latitude.toFixed(6);
     gpsLng = pos.coords.longitude.toFixed(6);
     gpsAcc = Math.round(pos.coords.accuracy);
@@ -492,21 +544,34 @@ function startGPS() {
   }, {enableHighAccuracy:true, maximumAge:10000});
 }
 
-// ---- DETEKSI FAKE GPS ----
+// ---- FAKE GPS DETECTION ----
 function isMockLocation(pos) {
-  if (pos.coords.accuracy && pos.coords.accuracy < 1) return true;
+  if (pos.coords.accuracy !== undefined && pos.coords.accuracy < 2) return true;
+  if (pos.coords.altitudeAccuracy === 0) return true;
+  if (typeof pos.coords.speed === 'number' && pos.coords.speed < 0) return true;
   return false;
 }
 
 // ---- CAMERA ----
-function openCamera() {
-  navigator.mediaDevices.getUserMedia({video:{facingMode},audio:false})
-    .then(s => {
-      camStream = s;
-      document.getElementById('videoEl').srcObject = s;
-      document.getElementById('cameraModal').classList.remove('hidden');
-    })
-    .catch(() => showAlert('Tidak bisa akses kamera. Izinkan akses kamera di browser.','error'));
+function openCamera(mode) {
+  camMode = mode;
+  document.getElementById('camTitle').textContent = mode === 'ci' ? 'Foto Check-in' : 'Foto Check-out';
+  document.getElementById('camSub').textContent   = 'Pastikan wajah terlihat jelas dan terang';
+  return new Promise((resolve) => {
+    camResolve = resolve;
+    navigator.mediaDevices.getUserMedia({video:{facingMode},audio:false})
+      .then(s => {
+        camStream = s;
+        document.getElementById('videoEl').srcObject = s;
+        document.getElementById('cameraModal').classList.remove('hidden');
+      })
+      .catch(() => { showAlert('Tidak bisa akses kamera.','error'); resolve(null); });
+  });
+}
+
+function cancelCamera() {
+  closeCamera();
+  if (camResolve) { camResolve(null); camResolve = null; }
 }
 
 function closeCamera() {
@@ -516,7 +581,9 @@ function closeCamera() {
 
 function flipCamera() {
   facingMode = facingMode === 'user' ? 'environment' : 'user';
-  closeCamera(); openCamera();
+  if (camStream) camStream.getTracks().forEach(t=>t.stop());
+  navigator.mediaDevices.getUserMedia({video:{facingMode},audio:false})
+    .then(s => { camStream = s; document.getElementById('videoEl').srcObject = s; });
 }
 
 function capturePhoto() {
@@ -524,77 +591,68 @@ function capturePhoto() {
   const c = document.getElementById('canvas');
   c.width = 400; c.height = 400;
   const ctx = c.getContext('2d');
-
-  // Mirror untuk kamera depan
   if (facingMode === 'user') { ctx.translate(c.width,0); ctx.scale(-1,1); }
-  // Crop tengah (square)
   const size = Math.min(v.videoWidth, v.videoHeight);
-  const sx   = (v.videoWidth - size) / 2;
-  const sy   = (v.videoHeight - size) / 2;
+  const sx   = (v.videoWidth-size)/2, sy = (v.videoHeight-size)/2;
   ctx.drawImage(v, sx, sy, size, size, 0, 0, 400, 400);
-
-  // Reset transform untuk overlay
   ctx.setTransform(1,0,0,1,0,0);
 
-  // Overlay timestamp + nama
   const now = new Date();
-  const ts  = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-  ctx.fillStyle = 'rgba(0,0,0,0.55)';
-  ctx.fillRect(0, 340, 400, 60);
+  const ts  = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) + ' ' + zona;
+  const label = camMode === 'ci' ? 'CHECK-IN' : 'CHECK-OUT';
+  ctx.fillStyle = 'rgba(0,0,0,.6)';
+  ctx.fillRect(0, 320, 400, 80);
+  ctx.fillStyle = camMode === 'ci' ? '#4ade80' : '#60a5fa';
+  ctx.font = 'bold 13px DM Mono, monospace';
+  ctx.fillText(label, 12, 342);
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 14px DM Mono, monospace';
+  ctx.font = 'bold 13px DM Mono, monospace';
   ctx.fillText(user ? user.nama : '', 12, 362);
-  ctx.font = '12px DM Mono, monospace';
-  ctx.fillText(user ? user.id : '', 12, 380);
+  ctx.font = '11px DM Mono, monospace';
+  ctx.fillText(user ? user.id + ' · ' + user.branch : '', 12, 380);
   ctx.fillText(ts, 12, 396);
 
-  selfieB64 = c.toDataURL('image/jpeg', 0.5);
-  const thumb = document.getElementById('selfieThumb');
-  thumb.innerHTML = '<img src="'+selfieB64+'" alt="selfie">';
-  document.getElementById('selfieLabel').textContent = 'Foto berhasil diambil';
-  document.getElementById('selfieSub').textContent   = 'Tap "Foto" untuk ulangi';
+  const b64 = c.toDataURL('image/jpeg', 0.5);
   closeCamera();
+  if (camResolve) { camResolve(b64); camResolve = null; }
 }
 
 // ---- CHECKIN ----
 async function doCheckin() {
-  if (!selfieB64) { showAlert('Ambil foto selfie dulu!','warning'); return; }
-  if (!gpsLat)    { showAlert('GPS belum aktif. Aktifkan lokasi di HP.','warning'); return; }
-  if (checkedIn)  { showAlert('Sudah check-in hari ini.','warning'); return; }
+  if (!gpsLat) { showAlert('GPS belum aktif. Aktifkan lokasi di HP.','warning'); return; }
+  if (checkedIn) { showAlert('Sudah check-in hari ini.','warning'); return; }
+
+  const foto = await openCamera('ci');
+  if (!foto) return;
 
   showLoading('Menyimpan check-in...');
-  const now = new Date();
-  const jam = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
   try {
     const res = await apiPost({
       action:'checkin', id:user.id, nama:user.nama,
       region:user.region, entity:user.entity, branch:user.branch,
-      jamMasuk:jam, lat:gpsLat, lng:gpsLng
+      lat:gpsLat, lng:gpsLng, offset:tzOffset
     });
     hideLoading();
     if (res.status === 'ok') {
-      ciTime = jam; checkedIn = true;
+      ciTime = res.jam; checkedIn = true;
       const today = new Date().toLocaleDateString('id-ID');
-      localStorage.setItem('cimory_ci_'+today, jam);
-      setStatus('masuk','Sudah Check-in','Masuk pukul '+jam);
-      disableCI(); enableCO();
+      localStorage.setItem('hoa_ci_'+today, ciTime);
+      setStatus('masuk','Sudah Check-in','Masuk pukul '+ciTime);
+      disableCI(); enableCO(); lockIzin();
       showOverlay('ci','Check-in Berhasil! 🎉','Data tersimpan ke Google Sheets',[
         ['Nama', user.nama],['ID', user.id],['Branch', user.branch],
-        ['Waktu', jam],['GPS', gpsLat+', '+gpsLng],['Akurasi', gpsAcc+'m'],
+        ['Waktu', ciTime],['GPS', gpsLat+', '+gpsLng],['Akurasi', gpsAcc+'m'],
       ]);
-    } else {
-      showAlert(res.message,'error');
-    }
+    } else { showAlert(res.message,'error'); }
   } catch(e) {
     hideLoading();
-    // Simpan lokal jika offline
-    ciTime = jam; checkedIn = true;
+    ciTime = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' '+zona;
+    checkedIn = true;
     const today = new Date().toLocaleDateString('id-ID');
-    localStorage.setItem('cimory_ci_'+today, jam);
-    setStatus('masuk','Sudah Check-in (Offline)','Masuk pukul '+jam);
-    disableCI(); enableCO();
-    showAlert('Tersimpan lokal. Akan sync saat online.','warning');
+    localStorage.setItem('hoa_ci_'+today, ciTime);
+    setStatus('masuk','Sudah Check-in (Offline)','Masuk pukul '+ciTime);
+    disableCI(); enableCO(); lockIzin();
+    showAlert('Tersimpan lokal. Sync otomatis saat online.','warning');
   }
 }
 
@@ -602,37 +660,36 @@ async function doCheckin() {
 async function doCheckout() {
   if (!checkedIn)  { showAlert('Belum check-in hari ini.','warning'); return; }
   if (checkedOut)  { showAlert('Sudah check-out hari ini.','warning'); return; }
-  if (!selfieB64)  { showAlert('Ambil foto selfie dulu!','warning'); return; }
+  if (!gpsLat)     { showAlert('GPS belum aktif.','warning'); return; }
+
+  const foto = await openCamera('co');
+  if (!foto) return;
 
   showLoading('Menyimpan check-out...');
-  const now = new Date();
-  const jam = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
   try {
-    const res = await apiPost({ action:'checkout', id:user.id, jamKeluar:jam });
+    const res = await apiPost({ action:'checkout', id:user.id, latCO:gpsLat, lngCO:gpsLng, offset:tzOffset });
     hideLoading();
     if (res.status === 'ok') {
-      coTime = jam; checkedOut = true;
+      coTime = res.jam; checkedOut = true;
       const today = new Date().toLocaleDateString('id-ID');
-      localStorage.setItem('cimory_co_'+today, jam);
-      setStatus('pulang','Sudah Check-out','Pulang pukul '+jam);
+      localStorage.setItem('hoa_co_'+today, coTime);
+      setStatus('pulang','Sudah Check-out','Pulang pukul '+coTime);
       disableCO();
       showOverlay('co','Check-out Berhasil! 👋','Sampai jumpa besok!',[
         ['Nama', user.nama],['Branch', user.branch],
-        ['Masuk', ciTime],['Pulang', jam],
-        ['Total', hitungDurasi(ciTime, jam)],
+        ['Masuk', ciTime],['Pulang', coTime],
+        ['Total', hitungDurasi(ciTime, coTime)],
       ]);
-    } else {
-      showAlert(res.message,'error');
-    }
+    } else { showAlert(res.message,'error'); }
   } catch(e) {
     hideLoading();
-    coTime = jam; checkedOut = true;
+    coTime = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' '+zona;
+    checkedOut = true;
     const today = new Date().toLocaleDateString('id-ID');
-    localStorage.setItem('cimory_co_'+today, jam);
-    setStatus('pulang','Sudah Check-out (Offline)','Pulang pukul '+jam);
+    localStorage.setItem('hoa_co_'+today, coTime);
+    setStatus('pulang','Sudah Check-out (Offline)','Pulang pukul '+coTime);
     disableCO();
-    showAlert('Tersimpan lokal. Akan sync saat online.','warning');
+    showAlert('Tersimpan lokal. Sync otomatis saat online.','warning');
   }
 }
 
@@ -647,18 +704,19 @@ async function doIzin() {
   try {
     const res = await apiPost({
       action:'izin', id:user.id, nama:user.nama, branch:user.branch,
-      tanggal:tgl, jenisIzin:jenis, keterangan:ket
+      tanggal:tgl, jenisIzin:jenis, keterangan:ket, offset:tzOffset
     });
     hideLoading();
     if (res.status === 'ok') {
       document.getElementById('ketIzin').value = '';
-      showOverlay('izin', jenis+' Berhasil Diajukan! 📝','Data tersimpan ke Google Sheets',[
+      hasIzin = true; lockIzin();
+      setStatus('izin','Sudah Mengajukan '+jenis,'Tidak bisa absen hari ini');
+      disableCI(); disableCO();
+      showOverlay('izin',jenis+' Berhasil Diajukan! 📝','Data tersimpan ke Google Sheets',[
         ['Nama', user.nama],['Jenis', jenis],
-        ['Tanggal', tgl],['Keterangan', ket || '-'],
+        ['Tanggal', tgl],['Keterangan', ket||'-'],
       ]);
-    } else {
-      showAlert(res.message,'error');
-    }
+    } else { showAlert(res.message,'error'); }
   } catch(e) {
     hideLoading();
     showAlert('Gagal mengirim. Cek koneksi internet.','error');
@@ -670,7 +728,7 @@ async function loadHistory() {
   const el = document.getElementById('histList');
   el.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Memuat...</div></div>';
   try {
-    const res = await fetch(API_URL+'?action=history&id='+encodeURIComponent(user.id));
+    const res  = await fetch(API_URL+'?action=history&id='+encodeURIComponent(user.id)+'&offset='+tzOffset);
     const data = await res.json();
     if (data.status === 'ok' && data.data.length > 0) {
       el.innerHTML = data.data.map(h => `
@@ -680,8 +738,8 @@ async function loadHistory() {
             <div class="hist-badge ${h.status}">${h.status}</div>
           </div>
           <div class="hist-bottom">
-            <div class="hist-time-box"><div class="hist-time-label">Masuk</div><div class="hist-time-val">${h.jamMasuk||'—'}</div></div>
-            <div class="hist-time-box"><div class="hist-time-label">Keluar</div><div class="hist-time-val">${h.jamKeluar||'—'}</div></div>
+            <div><div class="hist-time-label">Masuk</div><div class="hist-time-val">${h.jamMasuk}</div></div>
+            <div><div class="hist-time-label">Keluar</div><div class="hist-time-val">${h.jamKeluar}</div></div>
             <div class="hist-branch">${h.branch}</div>
           </div>
         </div>`).join('');
@@ -696,40 +754,34 @@ async function loadHistory() {
 // ---- LOGOUT ----
 function doLogout() {
   if (!confirm('Yakin ingin keluar dari akun '+user.nama+'?')) return;
-  localStorage.removeItem('cimory_user');
+  localStorage.removeItem('hoa_user');
   location.reload();
 }
 
 // ---- HELPERS ----
 function setStatus(cls, label, sub) {
-  const c = document.getElementById('statusCard');
-  c.className = 'status-card '+cls;
+  document.getElementById('statusCard').className = 'status-card '+cls;
   document.getElementById('statusLabel').textContent = label;
   document.getElementById('statusSub').textContent   = sub;
 }
-function disableCI() {
-  const b = document.getElementById('btnCI');
-  b.textContent = 'Sudah Check-in ✓';
-  b.className = 'btn-main btn-disabled'; b.disabled = true;
-}
-function enableCO() {
-  const b = document.getElementById('btnCO');
-  b.className = 'btn-main btn-co'; b.disabled = false;
-}
-function disableCO() {
-  const b = document.getElementById('btnCO');
-  b.textContent = 'Sudah Check-out ✓';
-  b.className = 'btn-main btn-disabled'; b.disabled = true;
+function enableCI() { const b=document.getElementById('btnCI'); b.className='btn-main btn-ci'; b.disabled=false; b.textContent='Check-in Sekarang'; }
+function disableCI() { const b=document.getElementById('btnCI'); b.className='btn-main btn-disabled'; b.disabled=true; b.textContent='Sudah Check-in ✓'; }
+function enableCO() { const b=document.getElementById('btnCO'); b.className='btn-main btn-co'; b.disabled=false; b.textContent='Check-out'; }
+function disableCO() { const b=document.getElementById('btnCO'); b.className='btn-main btn-disabled'; b.disabled=true; b.textContent='Sudah Check-out ✓'; }
+function enableIzin() { const b=document.getElementById('btnIzin'); b.className='btn-main btn-outline'; b.disabled=false; b.textContent='Ajukan Izin / Sakit / Cuti'; }
+function lockIzin() {
+  const b=document.getElementById('btnIzin'); b.className='btn-main btn-disabled'; b.disabled=true;
+  document.getElementById('izinForm').style.display='none';
+  document.getElementById('izinLocked').style.display='block';
 }
 function hitungDurasi(masuk, keluar) {
-  const [hm,mm] = masuk.split(':').map(Number);
-  const [hk,mk] = keluar.split(':').map(Number);
-  const m = (hk*60+mk)-(hm*60+mm);
+  const hm=parseInt(masuk.split(':')[0]), mm=parseInt(masuk.split(':')[1]);
+  const hk=parseInt(keluar.split(':')[0]), mk=parseInt(keluar.split(':')[1]);
+  const m=(hk*60+mk)-(hm*60+mm);
   return Math.floor(m/60)+' jam '+(m%60)+' menit';
 }
 function setDefaultDate() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('tglIzin').value = today;
+  document.getElementById('tglIzin').value = new Date().toISOString().split('T')[0];
 }
 function navTo(idx, pageId) {
   document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===idx));
@@ -737,13 +789,12 @@ function navTo(idx, pageId) {
   document.getElementById(pageId).classList.add('active');
 }
 function showOverlay(type, title, sub, rows) {
-  const icons = {ci:'✅',co:'👋',izin:'📝'};
-  const ic = document.getElementById('overlayIcon');
-  ic.className = 'overlay-icon '+type;
-  ic.textContent = icons[type]||'✅';
-  document.getElementById('overlayTitle').textContent = title;
-  document.getElementById('overlaySub').textContent   = sub;
-  document.getElementById('overlayDetail').innerHTML  = rows.map(([k,v])=>
+  const icons={ci:'✅',co:'👋',izin:'📝'};
+  const ic=document.getElementById('overlayIcon');
+  ic.className='overlay-icon '+type; ic.textContent=icons[type]||'✅';
+  document.getElementById('overlayTitle').textContent=title;
+  document.getElementById('overlaySub').textContent=sub;
+  document.getElementById('overlayDetail').innerHTML=rows.map(([k,v])=>
     `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`
   ).join('');
   document.getElementById('overlay').classList.remove('hidden');
@@ -753,25 +804,21 @@ function closeOverlay() {
   navTo(0,'pageHome');
 }
 function showAlert(msg, type) {
-  const el = document.getElementById('alertBox');
-  el.textContent = msg; el.className = 'alert-box show '+type;
-  setTimeout(()=>el.classList.remove('show'), 3000);
+  const el=document.getElementById('alertBox');
+  el.textContent=msg; el.className='alert-box show '+type;
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
 function showLoading(msg) {
-  document.getElementById('loadingText').textContent = msg||'Memproses...';
+  document.getElementById('loadingText').textContent=msg||'Memproses...';
   document.getElementById('loadingOverlay').classList.remove('hidden');
 }
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.add('hidden');
-}
+function hideLoading() { document.getElementById('loadingOverlay').classList.add('hidden'); }
 async function apiPost(data) {
-  const res = await fetch(API_URL, {method:'POST', body:JSON.stringify(data)});
+  const res = await fetch(API_URL,{method:'POST',body:JSON.stringify(data)});
   return await res.json();
 }
-
-// Enter key pada login
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) doLogin();
+  if (e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) doLogin();
 });
 </script>
 </body>
