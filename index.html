@@ -235,6 +235,20 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </style>
 </head>
 <body>
+<script>
+// Unregister service worker lama agar tidak cache script lama
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(reg) { reg.unregister(); });
+  });
+  // Clear semua cache lama
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      names.forEach(function(name) { caches.delete(name); });
+    });
+  }
+}
+</script>
 <div id="app">
 
   <div class="alert-box" id="alertBox"></div>
