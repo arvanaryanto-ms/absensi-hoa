@@ -1447,7 +1447,37 @@ function tampilkanNotifCO(body) {
 }
 
 </script>
-<script src="face-api.min.js" onload="console.log('face-api loaded:', typeof faceapi)"></script>
+<script>
+// Load face-api dengan fallback ke beberapa CDN
+(function() {
+  var cdns = [
+    'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js',
+    'https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js'
+  ];
+  var idx = 0;
+  function tryLoad() {
+    if (idx >= cdns.length) {
+      console.error('Semua CDN gagal');
+      window._faceApiLoadFailed = true;
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = cdns[idx];
+    s.onload = function() {
+      console.log('face-api loaded dari:', cdns[idx]);
+      window._faceApiLoaded = true;
+    };
+    s.onerror = function() {
+      console.warn('Gagal dari:', cdns[idx]);
+      idx++;
+      tryLoad();
+    };
+    document.head.appendChild(s);
+  }
+  tryLoad();
+})();
+</script>
 </body>
 </html>
 <!-- v3.2 fix: GPS checkout kolom benar, API URL updated -->
