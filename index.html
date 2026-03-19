@@ -170,7 +170,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .empty-text{font-size:14px}
 
 /* ===== FACE REGISTER SCREEN ===== */
-.face-reg-screen{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:100%;background:var(--blue);z-index:500;display:flex;flex-direction:column}
+.face-reg-screen{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:var(--blue);z-index:9999;display:flex;flex-direction:column}
 .face-reg-screen.hidden{display:none}
 .face-reg-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 28px 10px;gap:10px}
 .face-reg-icon{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:30px}
@@ -183,7 +183,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .face-reg-card{background:var(--white);border-radius:24px 24px 0 0;padding:24px 24px 32px;flex-shrink:0}
 
 /* ===== FACE VERIFY SCREEN ===== */
-.face-verify-screen{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:100%;background:#000;z-index:450;display:flex;flex-direction:column}
+.face-verify-screen{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;flex-direction:column}
 .face-verify-screen.hidden{display:none}
 .face-verify-hdr{background:#0a3d62;padding:14px 20px 12px;text-align:center;flex-shrink:0}
 .face-verify-title{color:#fff;font-size:15px;font-weight:600}
@@ -1181,6 +1181,10 @@ function cancelFaceVerify() {
 }
 
 function confirmFaceVerify() {
+  if (faceMode === 'register' && !pendingDesc) {
+    setFacePill('warn','⚠️ Belum ada wajah, tunggu sebentar...',0);
+    return;
+  }
   closeFaceScreen();
   if (faceResolve) { faceResolve(true); faceResolve = null; }
 }
