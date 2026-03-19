@@ -9,7 +9,6 @@
 <meta name="theme-color" content="#0a3d62">
 <title>Absensi HOA</title>
 <link rel="manifest" href="manifest.json">
-<script src="face-api.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -1448,6 +1447,7 @@ function tampilkanNotifCO(body) {
 }
 
 </script>
+<script src="face-api.min.js" onload="console.log('face-api loaded:', typeof faceapi)"></script>
 </body>
 </html>
 <!-- v3.2 fix: GPS checkout kolom benar, API URL updated -->
