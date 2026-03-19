@@ -1278,25 +1278,25 @@ async function runFaceDetection() {
 
       // Validasi kondisi
       if (brightness < 40) {
-        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setGuideRingColor('#f59e0b');
         setFacePill('warn','💡 Kurang cahaya — cari tempat lebih terang',0);
         document.getElementById('faceBtnOk').disabled = true;
         faceLoopTimer = setTimeout(loop, 350); return;
       }
       if (faceRatio < 0.06) {
-        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setGuideRingColor('#f59e0b');
         setFacePill('warn','↔ Terlalu jauh — dekatkan wajah ke kamera',0);
         document.getElementById('faceBtnOk').disabled = true;
         faceLoopTimer = setTimeout(loop, 350); return;
       }
       if (faceRatio > 0.65) {
-        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setGuideRingColor('#f59e0b');
         setFacePill('warn','↕ Terlalu dekat — jauhkan sedikit dari kamera',0);
         document.getElementById('faceBtnOk').disabled = true;
         faceLoopTimer = setTimeout(loop, 350); return;
       }
       if (eyeAngle > 15) {
-        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setGuideRingColor('#f59e0b');
         setFacePill('warn','🔄 Wajah miring — hadapkan lurus ke kamera',0);
         document.getElementById('faceBtnOk').disabled = true;
         faceLoopTimer = setTimeout(loop, 350); return;
@@ -1304,22 +1304,22 @@ async function runFaceDetection() {
 
       // Semua kondisi OK
       if (faceMode === 'register') {
-        drawFaceBox(ctx, bx, by, bw, bh, '#4ade80');
+        setGuideRingColor('#4ade80');
         const conf = Math.round(det.detection.score * 100);
         setFacePill('ok','✓ Wajah terdeteksi (' + conf + '%)', conf);
         pendingDesc = det.descriptor;
-        document.getElementById('faceBtnOk').disabled = conf < 70;
+        document.getElementById('faceBtnOk').disabled = conf < 95;
         pendingDesc = det.descriptor;
       } else {
         if (!stored) {
-          drawFaceBox(ctx, bx, by, bw, bh, '#f87171');
+          setGuideRingColor('#f87171');
           setFacePill('fail','Data wajah tidak ditemukan. Hubungi admin.',0);
           document.getElementById('faceBtnOk').disabled = true;
         } else {
           const dist    = faceapi.euclideanDistance(det.descriptor, stored);
           const matched = dist <= FACE_THRESHOLD;
           const conf    = Math.round(Math.max(0,(1 - dist/FACE_THRESHOLD)) * 100);
-          drawFaceBox(ctx, bx, by, bw, bh, matched ? '#4ade80' : '#f87171');
+          setGuideRingColor(matched ? '#4ade80' : '#f87171');
           if (matched) {
             setFacePill('ok','✓ Wajah cocok (' + conf + '%)', conf);
             document.getElementById('faceBtnOk').disabled = conf < 70;
@@ -1332,15 +1332,21 @@ async function runFaceDetection() {
     } catch(e) { /* skip frame error */ }
     faceLoopTimer = setTimeout(loop, 350);
   };
+  setGuideRingColor('rgba(255,255,255,0.8)');
   setFacePill('scanning','Mendeteksi wajah...',0);
   loop();
 }
 
 function drawFaceBox(ctx, x, y, w, h, color) {
-  ctx.strokeStyle = color; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.roundRect(x,y,w,h,8); ctx.stroke();
-  ctx.globalAlpha = 0.1; ctx.fillStyle = color;
-  ctx.fillRect(x,y,w,h); ctx.globalAlpha = 1;
+  // Kotak dihapus - warna bulatan saja yang berubah
+}
+
+function setGuideRingColor(color) {
+  const ring = document.getElementById('faceGuideRing');
+  if (ring) {
+    ring.style.borderColor = color;
+    ring.style.boxShadow = '0 0 0 9999px rgba(0,0,0,.55), 0 0 20px ' + color;
+  }
 }
 
 function setFacePill(type, text, conf) {
