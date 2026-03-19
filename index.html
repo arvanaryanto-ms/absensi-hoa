@@ -191,7 +191,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .face-cam-wrap{position:relative;flex:1;overflow:hidden}
 #faceVideo{width:100%;height:100%;object-fit:cover}
 #faceCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
-.face-guide-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:min(85vw,380px);height:min(85vw,380px);border-radius:50%;border:3px solid rgba(255,255,255,.8);box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none}
+.face-guide-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:min(90vw,400px);height:min(90vw,400px);border-radius:50%;border:3px solid rgba(255,255,255,.8);box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none}
 .face-result-bar{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 18px;background:linear-gradient(transparent,rgba(0,0,0,.9))}
 .face-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;margin-bottom:6px}
 .face-pill.scanning{background:rgba(255,255,255,.15);color:#fff}
@@ -1013,7 +1013,7 @@ document.addEventListener('keydown', e => {
 // MODULE: FACE API - Verifikasi & Pendaftaran Wajah
 // ================================================================
 const FACE_MODEL_URL = 'weights';
-const FACE_THRESHOLD = 0.50;   // jarak max euclidean
+const FACE_THRESHOLD = 0.55;   // jarak max euclidean
 const FACE_STORAGE   = 'hoa_face';
 const MAX_ATTEMPTS   = 3;
 
@@ -1307,7 +1307,8 @@ async function runFaceDetection() {
         drawFaceBox(ctx, bx, by, bw, bh, '#4ade80');
         const conf = Math.round(det.detection.score * 100);
         setFacePill('ok','✓ Wajah terdeteksi (' + conf + '%)', conf);
-        document.getElementById('faceBtnOk').disabled = conf < 65;
+        pendingDesc = det.descriptor;
+        document.getElementById('faceBtnOk').disabled = conf < 70;
         pendingDesc = det.descriptor;
       } else {
         if (!stored) {
@@ -1321,7 +1322,7 @@ async function runFaceDetection() {
           drawFaceBox(ctx, bx, by, bw, bh, matched ? '#4ade80' : '#f87171');
           if (matched) {
             setFacePill('ok','✓ Wajah cocok (' + conf + '%)', conf);
-            document.getElementById('faceBtnOk').disabled = conf < 55;
+            document.getElementById('faceBtnOk').disabled = conf < 70;
           } else {
             setFacePill('fail','✗ Wajah tidak cocok (' + conf + '%)', conf);
             document.getElementById('faceBtnOk').disabled = true;
