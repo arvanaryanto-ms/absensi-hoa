@@ -578,7 +578,10 @@ async function initApp() {
   setUserUI();
   startGPS();
   await cekStatusHariIni();
-  await cekKemarinDanKunci();
+  // Jangan cek kemarin kalau hari ini sudah check-in (masih aktif bekerja)
+  if (!checkedIn) {
+    await cekKemarinDanKunci();
+  }
   requestPushPermission();
   preloadFaceModels();
 }
