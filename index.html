@@ -1030,19 +1030,43 @@ let faceAttempts   = 0;
 async function preloadFaceModels() {
   if (faceApiReady || faceApiLoading) return;
   faceApiLoading = true;
-  // face-api sudah embedded, langsung tersedia
+  
+  // Pastikan faceapi library tersedia (sudah di-embed)
   if (typeof faceapi === 'undefined') {
     faceApiLoading = false;
-    throw new Error('face-api tidak berhasil dimuat');
+    throw new Error('face-api library tidak tersedia');
   }
-  try {
-    await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
-      faceapi.nets.faceLandmark68TinyNet.loadFromUri(FACE_MODEL_URL),
-      faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL),
-    ]);
-    faceApiReady = true;
-  } catch(e) { faceApiLoading = false; throw e; }
+  
+  // Coba load model weights
+  // Jika gagal dari 'weights', coba path lain
+  const paths = [
+    'weights',
+    './weights', 
+    '/absensi-hoa/weights',
+    'https://arvanaryanto-ms.github.io/absensi-hoa/weights'
+  ];
+  
+  let lastErr = null;
+  for (const path of paths) {
+    try {
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(path),
+        faceapi.nets.faceLandmark68TinyNet.loadFromUri(path),
+        faceapi.nets.faceRecognitionNet.loadFromUri(path),
+      ]);
+      faceApiReady = true;
+      console.log('Face models loaded from:', path);
+      faceApiLoading = false;
+      return;
+    } catch(e) {
+      lastErr = e;
+      console.warn('Failed to load from', path, e.message);
+      // Reset nets agar bisa coba lagi
+      faceapi.nets.tinyFaceDetector.isLoaded && faceapi.nets.tinyFaceDetector.dispose && faceapi.nets.tinyFaceDetector.dispose();
+    }
+  }
+  faceApiLoading = false;
+  throw lastErr || new Error('Gagal memuat model wajah dari semua path');
 }
 
 async function ensureFaceModels() {
