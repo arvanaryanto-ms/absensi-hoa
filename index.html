@@ -1025,6 +1025,16 @@ let faceAttempts   = 0;
 async function preloadFaceModels() {
   if (faceApiReady || faceApiLoading) return;
   faceApiLoading = true;
+  // Tunggu face-api selesai load (maks 15 detik)
+  let waited = 0;
+  while (typeof faceapi === 'undefined' && waited < 15000) {
+    await new Promise(r => setTimeout(r, 200));
+    waited += 200;
+  }
+  if (typeof faceapi === 'undefined') {
+    faceApiLoading = false;
+    throw new Error('face-api tidak berhasil dimuat');
+  }
   try {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
@@ -1032,7 +1042,7 @@ async function preloadFaceModels() {
       faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL),
     ]);
     faceApiReady = true;
-  } catch(e) { faceApiLoading = false; }
+  } catch(e) { faceApiLoading = false; throw e; }
 }
 
 async function ensureFaceModels() {
@@ -1461,35 +1471,33 @@ function tampilkanNotifCO(body) {
 }
 
 </script>
+
+
 <script>
-// Load face-api dengan fallback ke beberapa CDN
-(function() {
-  var cdns = [
-    'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js',
-    'https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js'
-  ];
-  var idx = 0;
-  function tryLoad() {
-    if (idx >= cdns.length) {
-      console.error('Semua CDN gagal');
+// Load face-api via fetch+blob URL (bypass CSP script-src restriction)
+(function loadFaceApi() {
+  var url = 'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js';
+  fetch(url)
+    .then(function(r) { return r.blob(); })
+    .then(function(blob) {
+      var blobUrl = URL.createObjectURL(blob);
+      var s = document.createElement('script');
+      s.src = blobUrl;
+      s.onload = function() {
+        URL.revokeObjectURL(blobUrl);
+        window._faceApiLoaded = true;
+        console.log('face-api OK:', typeof faceapi);
+      };
+      s.onerror = function() {
+        console.error('face-api gagal load');
+        window._faceApiLoadFailed = true;
+      };
+      document.head.appendChild(s);
+    })
+    .catch(function(e) {
+      console.error('fetch face-api gagal:', e);
       window._faceApiLoadFailed = true;
-      return;
-    }
-    var s = document.createElement('script');
-    s.src = cdns[idx];
-    s.onload = function() {
-      console.log('face-api loaded dari:', cdns[idx]);
-      window._faceApiLoaded = true;
-    };
-    s.onerror = function() {
-      console.warn('Gagal dari:', cdns[idx]);
-      idx++;
-      tryLoad();
-    };
-    document.head.appendChild(s);
-  }
-  tryLoad();
+    });
 })();
 </script>
 </body>
