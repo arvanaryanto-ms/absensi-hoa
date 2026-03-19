@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#0a3d62">
 <title>Absensi HOA</title>
 <link rel="manifest" href="manifest.json">
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -168,6 +169,70 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .empty-state{text-align:center;padding:40px 20px;color:var(--text-l)}
 .empty-icon{font-size:40px;margin-bottom:10px}
 .empty-text{font-size:14px}
+
+/* ===== FACE REGISTER SCREEN ===== */
+.face-reg-screen{position:absolute;inset:0;background:var(--blue);z-index:500;display:flex;flex-direction:column}
+.face-reg-screen.hidden{display:none}
+.face-reg-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 28px 10px;gap:10px}
+.face-reg-icon{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:30px}
+.face-reg-title{font-size:21px;font-weight:600;color:#fff;letter-spacing:-.4px;text-align:center;line-height:1.3}
+.face-reg-sub{font-size:13px;color:rgba(255,255,255,.65);text-align:center;line-height:1.6}
+.face-reg-steps{display:flex;flex-direction:column;gap:8px;width:100%;margin-top:4px}
+.face-reg-step{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:10px;padding:10px 14px}
+.face-reg-stepnum{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.face-reg-steptext{font-size:13px;color:rgba(255,255,255,.85)}
+.face-reg-card{background:var(--white);border-radius:24px 24px 0 0;padding:24px 24px 32px;flex-shrink:0}
+
+/* ===== FACE VERIFY SCREEN ===== */
+.face-verify-screen{position:absolute;inset:0;background:#000;z-index:450;display:flex;flex-direction:column}
+.face-verify-screen.hidden{display:none}
+.face-verify-hdr{background:#0a3d62;padding:14px 20px 12px;text-align:center;flex-shrink:0}
+.face-verify-title{color:#fff;font-size:15px;font-weight:600}
+.face-verify-sub{color:rgba(255,255,255,.6);font-size:12px;margin-top:3px}
+.face-cam-wrap{position:relative;flex:1;overflow:hidden}
+#faceVideo{width:100%;height:100%;object-fit:cover}
+#faceCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.face-guide-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);width:190px;height:190px;border-radius:50%;border:3px solid rgba(255,255,255,.3);pointer-events:none}
+.face-result-bar{position:absolute;bottom:0;left:0;right:0;padding:12px 16px 18px;background:linear-gradient(transparent,rgba(0,0,0,.9))}
+.face-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;margin-bottom:6px}
+.face-pill.scanning{background:rgba(255,255,255,.15);color:#fff}
+.face-pill.ok{background:rgba(34,197,94,.25);color:#4ade80;border:1px solid rgba(34,197,94,.4)}
+.face-pill.warn{background:rgba(245,158,11,.25);color:#fcd34d;border:1px solid rgba(245,158,11,.35)}
+.face-pill.fail{background:rgba(239,68,68,.25);color:#f87171;border:1px solid rgba(239,68,68,.35)}
+.face-pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.face-conf-wrap{background:rgba(255,255,255,.18);border-radius:99px;height:5px;margin-bottom:10px;overflow:hidden}
+.face-conf-bar{height:5px;border-radius:99px;width:0%;transition:width .4s,background .3s}
+.face-actions{display:flex;gap:8px}
+.face-btn-cancel{flex:1;padding:12px;border-radius:var(--radius-xs);border:none;background:rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.face-btn-ok{flex:1;padding:12px;border-radius:var(--radius-xs);border:none;background:#1e8449;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.face-btn-ok:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.35);cursor:default}
+.face-load-bar{position:absolute;top:0;left:0;height:3px;background:#1a6fc4;animation:faceLoad 2s ease infinite}
+.face-attempts{font-size:11px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:6px}
+@keyframes faceLoad{0%{width:0%;opacity:1}70%{width:85%;opacity:1}100%{width:100%;opacity:0}}
+
+/* ===== LOCKED SCREEN ===== */
+.locked-screen{position:absolute;inset:0;background:var(--white);z-index:300;display:flex;flex-direction:column;overflow-y:auto}
+.locked-screen.hidden{display:none}
+.locked-hdr{background:var(--red);padding:env(safe-area-inset-top,10px) 20px 20px;color:#fff;text-align:center;flex-shrink:0}
+.locked-hdr-icon{font-size:32px;margin-bottom:6px}
+.locked-hdr-title{font-size:18px;font-weight:600}
+.locked-hdr-sub{font-size:12px;opacity:.8;margin-top:3px;line-height:1.5}
+.locked-body{padding:20px;flex:1}
+.locked-alert{border-radius:var(--radius-s);padding:14px;margin-bottom:16px;border:1px solid}
+.locked-alert.merah{background:var(--red-l);border-color:#f5b7b1}
+.locked-alert.kuning{background:var(--amber-l);border-color:#f9ca74}
+.locked-alert-text{font-size:13px;line-height:1.6}
+.locked-alert.merah .locked-alert-text{color:var(--red)}
+.locked-alert.kuning .locked-alert-text{color:var(--amber)}
+.locked-alert-date{font-size:12px;font-weight:600;margin-top:5px;font-family:'DM Mono',monospace}
+.locked-alert.merah .locked-alert-date{color:var(--red)}
+.locked-alert.kuning .locked-alert-date{color:var(--amber)}
+.locked-poll{background:var(--amber-l);border:1px solid #f9ca74;border-radius:var(--radius-s);padding:12px 14px;margin-top:12px;display:none;align-items:center;gap:10px}
+.locked-poll-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:pulse 1.5s ease infinite;flex-shrink:0}
+.locked-poll-text{font-size:12px;color:var(--amber);font-weight:500}
+.locked-sent{background:var(--green-l);border:1px solid #a9dfbf;border-radius:var(--radius-s);padding:12px 14px;margin-top:12px;display:none}
+.locked-sent-text{font-size:13px;color:var(--green);font-weight:500}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body>
@@ -178,6 +243,94 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
   <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text" id="loadingText">Memproses...</div>
+  </div>
+
+  <!-- SCREEN: DAFTAR WAJAH (paksa, tidak bisa di-skip) -->
+  <div class="face-reg-screen hidden" id="faceRegScreen">
+    <div class="face-reg-top">
+      <div class="face-reg-icon">👤</div>
+      <div class="face-reg-title">Daftarkan Wajah Anda</div>
+      <div class="face-reg-sub">Wajah digunakan untuk verifikasi setiap login.<br>Cukup dilakukan sekali saja.</div>
+      <div class="face-reg-steps">
+        <div class="face-reg-step"><div class="face-reg-stepnum">1</div><div class="face-reg-steptext">Pastikan pencahayaan cukup & wajah terlihat jelas</div></div>
+        <div class="face-reg-step"><div class="face-reg-stepnum">2</div><div class="face-reg-steptext">Arahkan wajah ke lingkaran panduan di kamera</div></div>
+        <div class="face-reg-step"><div class="face-reg-stepnum">3</div><div class="face-reg-steptext">Tap Konfirmasi saat kotak hijau muncul</div></div>
+      </div>
+    </div>
+    <div class="face-reg-card">
+      <div class="login-title" style="margin-bottom:14px">Siap mendaftarkan wajah?</div>
+      <div class="login-error" id="faceRegError"></div>
+      <button class="login-btn" onclick="startFaceRegister()">📷 Buka Kamera & Daftarkan</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: VERIFIKASI WAJAH -->
+  <div class="face-verify-screen hidden" id="faceVerifyScreen">
+    <div class="face-verify-hdr">
+      <div class="face-verify-title" id="faceVerifyTitle">Verifikasi Wajah</div>
+      <div class="face-verify-sub" id="faceVerifySub">Arahkan wajah ke lingkaran panduan</div>
+    </div>
+    <div class="face-cam-wrap">
+      <video id="faceVideo" autoplay playsinline muted></video>
+      <canvas id="faceCanvas"></canvas>
+      <div class="face-guide-ring" id="faceGuideRing"></div>
+      <div class="face-load-bar" id="faceLoadBar" style="display:none"></div>
+      <div class="face-result-bar">
+        <div class="face-pill scanning" id="facePill">
+          <div class="face-pill-dot" id="facePillDot" style="background:#fff;animation:spin .8s linear infinite"></div>
+          <span id="facePillText">Memuat model AI...</span>
+        </div>
+        <div class="face-conf-wrap"><div class="face-conf-bar" id="faceConfBar"></div></div>
+        <div class="face-attempts" id="faceAttempts"></div>
+        <div class="face-actions">
+          <button class="face-btn-cancel" onclick="cancelFaceVerify()">✕ Batal</button>
+          <button class="face-btn-ok" id="faceBtnOk" onclick="confirmFaceVerify()" disabled>✓ Konfirmasi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: TERKUNCI -->
+  <div class="locked-screen hidden" id="lockedScreen">
+    <div class="locked-hdr">
+      <div class="locked-hdr-icon">🔒</div>
+      <div class="locked-hdr-title" id="lockedTitle">Aplikasi Terkunci</div>
+      <div class="locked-hdr-sub" id="lockedSub">Terdapat ketidaksesuaian data absensi</div>
+    </div>
+    <div class="locked-body">
+      <div class="locked-alert merah" id="lockedAlert">
+        <div class="locked-alert-text" id="lockedAlertText">-</div>
+        <div class="locked-alert-date" id="lockedAlertDate">-</div>
+      </div>
+
+      <div id="lockedFormWrap">
+        <div class="sec-title" style="margin-bottom:10px">Alasan</div>
+        <div class="form-group">
+          <select class="form-select" id="lockedJenis">
+            <option value="">-- Pilih alasan --</option>
+            <option value="Lupa check-out">Lupa check-out</option>
+            <option value="HP mati / kehabisan baterai">HP mati / kehabisan baterai</option>
+            <option value="Tidak ada sinyal">Tidak ada sinyal</option>
+            <option value="Sakit mendadak">Sakit mendadak</option>
+            <option value="Keperluan mendesak">Keperluan mendesak</option>
+            <option value="Aplikasi error">Aplikasi error</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea class="form-textarea" id="lockedKet" placeholder="Keterangan tambahan (opsional)..."></textarea>
+        </div>
+        <button class="btn-main btn-ci" onclick="kirimAlasan()">Kirim Alasan ke Admin</button>
+      </div>
+
+      <div class="locked-sent" id="lockedSent">
+        <div class="locked-sent-text">✅ Alasan terkirim. Menunggu persetujuan admin...</div>
+      </div>
+      <div class="locked-poll" id="lockedPoll">
+        <div class="locked-poll-dot"></div>
+        <div class="locked-poll-text">Mengecek persetujuan admin setiap 30 detik...</div>
+      </div>
+    </div>
   </div>
 
   <!-- LOGIN -->
@@ -357,7 +510,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzBhbpEn6Vv7DGEL1JIi14ew4l08aUlFQMufa3iTNhDID9mYN93MIf1Fetk-Su5cvdwdg/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxryS0zfJ2eCL331SgTPJRWmo3tSd9BPuTNSKALBb-ZGA6cw5LvE_gvj_w2DHmJ082Y_w/exec';
 
 let user = null;
 let gpsLat = null, gpsLng = null, gpsAcc = null;
@@ -404,6 +557,9 @@ async function initApp() {
   setUserUI();
   startGPS();
   await cekStatusHariIni();
+  await cekKemarinDanKunci();
+  requestPushPermission();
+  preloadFaceModels();
 }
 
 async function cekStatusHariIni() {
@@ -463,7 +619,25 @@ async function doLogin() {
     if (res.status === 'ok') {
       user = res.user;
       localStorage.setItem('hoa_user', JSON.stringify(user));
-      initApp();
+      // Simpan faceData dari server ke localStorage jika ada
+      if (res.faceData) {
+        const store = JSON.parse(localStorage.getItem('hoa_face') || '{}');
+        store[user.id] = res.faceData;
+        localStorage.setItem('hoa_face', JSON.stringify(store));
+      }
+      // Cek apakah wajah sudah terdaftar
+      if (!res.hasFaceData) {
+        showFaceRegScreen();
+      } else {
+        const ok = await openFaceVerify('login');
+        if (!ok) {
+          user = null;
+          localStorage.removeItem('hoa_user');
+          showLoginError('Verifikasi wajah gagal. Coba lagi.');
+          return;
+        }
+        initApp();
+      }
     } else if (res.status === 'nonaktif') {
       showLoginError('🔒 ' + res.message);
     } else if (res.status === 'device_blocked') {
@@ -815,6 +989,432 @@ async function apiPost(data) {
 document.addEventListener('keydown', e => {
   if (e.key==='Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) doLogin();
 });
+// ================================================================
+// MODULE: FACE API - Verifikasi & Pendaftaran Wajah
+// ================================================================
+const FACE_MODEL_URL = 'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights';
+const FACE_THRESHOLD = 0.50;   // jarak max euclidean
+const FACE_STORAGE   = 'hoa_face';
+const MAX_ATTEMPTS   = 3;
+
+let faceApiReady   = false;
+let faceApiLoading = false;
+let faceStream     = null;
+let faceLoopTimer  = null;
+let faceResolve    = null;
+let faceMode       = 'login'; // login | register
+let pendingDesc    = null;
+let faceAttempts   = 0;
+
+// ---- Preload model di background ----
+async function preloadFaceModels() {
+  if (faceApiReady || faceApiLoading) return;
+  faceApiLoading = true;
+  try {
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
+      faceapi.nets.faceLandmark68TinyNet.loadFromUri(FACE_MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL),
+    ]);
+    faceApiReady = true;
+  } catch(e) { faceApiLoading = false; }
+}
+
+async function ensureFaceModels() {
+  if (faceApiReady) return true;
+  try { await preloadFaceModels(); return faceApiReady; }
+  catch(e) { return false; }
+}
+
+// ---- Ambil descriptor dari localStorage ----
+function getFaceDescriptor(userId) {
+  const store = JSON.parse(localStorage.getItem(FACE_STORAGE) || '{}');
+  const raw = store[userId];
+  if (!raw) return null;
+  // Bisa berupa array number (dari Sheets) atau Float32Array string
+  try {
+    const arr = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    return new Float32Array(arr);
+  } catch(e) { return null; }
+}
+
+// ---- Simpan ke localStorage & Sheets ----
+async function saveFaceDescriptor(userId, descriptor) {
+  const arr = Array.from(descriptor);
+  const store = JSON.parse(localStorage.getItem(FACE_STORAGE) || '{}');
+  store[userId] = arr;
+  localStorage.setItem(FACE_STORAGE, JSON.stringify(store));
+  // Kirim ke Google Sheets
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action:'simpanWajah', id:userId, faceData: JSON.stringify(arr) })
+    });
+  } catch(e) { console.log('Simpan wajah ke Sheets gagal (offline):', e); }
+}
+
+// ---- SCREEN DAFTAR WAJAH ----
+function showFaceRegScreen() {
+  document.getElementById('faceRegScreen').classList.remove('hidden');
+}
+
+async function startFaceRegister() {
+  const errEl = document.getElementById('faceRegError');
+  errEl.classList.remove('show');
+  const ok = await openFaceVerify('register');
+  if (ok && pendingDesc && user) {
+    await saveFaceDescriptor(user.id, pendingDesc);
+    pendingDesc = null;
+    document.getElementById('faceRegScreen').classList.add('hidden');
+    showAlert('Wajah berhasil didaftarkan! ✅','success');
+    initApp();
+  } else if (!ok) {
+    errEl.textContent = 'Pendaftaran dibatalkan. Coba lagi.';
+    errEl.classList.add('show');
+  }
+}
+
+// ---- BUKA LAYAR VERIFIKASI ----
+function openFaceVerify(mode) {
+  faceMode = mode;
+  faceAttempts = 0;
+  pendingDesc  = null;
+  const titles = { login:'Verifikasi Wajah — Login', register:'Daftarkan Wajah' };
+  const subs   = { login:'Arahkan wajah ke lingkaran panduan', register:'Posisikan wajah di tengah lalu konfirmasi' };
+  document.getElementById('faceVerifyTitle').textContent = titles[mode] || 'Verifikasi Wajah';
+  document.getElementById('faceVerifySub').textContent   = subs[mode]  || '';
+  document.getElementById('faceAttempts').textContent    = '';
+  document.getElementById('faceBtnOk').disabled = true;
+  setFacePill('scanning','Memuat model AI...',0);
+
+  return new Promise(resolve => {
+    faceResolve = resolve;
+    document.getElementById('faceVerifyScreen').classList.remove('hidden');
+    startFaceCamera()
+      .then(() => runFaceDetection())
+      .catch(() => setFacePill('fail','Gagal akses kamera. Izinkan kamera di browser.',0));
+  });
+}
+
+async function startFaceCamera() {
+  const video = document.getElementById('faceVideo');
+  faceStream = await navigator.mediaDevices.getUserMedia({
+    video:{ facingMode:'user', width:{ideal:640}, height:{ideal:480} }, audio:false
+  });
+  video.srcObject = faceStream;
+  await new Promise(r => { video.onloadedmetadata = r; });
+  const cv = document.getElementById('faceCanvas');
+  cv.width = video.videoWidth; cv.height = video.videoHeight;
+}
+
+function stopFaceCamera() {
+  clearTimeout(faceLoopTimer);
+  if (faceStream) { faceStream.getTracks().forEach(t => t.stop()); faceStream = null; }
+  const cv = document.getElementById('faceCanvas');
+  if (cv) cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+}
+
+function closeFaceScreen() {
+  stopFaceCamera();
+  document.getElementById('faceVerifyScreen').classList.add('hidden');
+  document.getElementById('faceLoadBar').style.display = 'none';
+}
+
+function cancelFaceVerify() {
+  closeFaceScreen();
+  if (faceResolve) { faceResolve(false); faceResolve = null; }
+}
+
+function confirmFaceVerify() {
+  closeFaceScreen();
+  if (faceResolve) { faceResolve(true); faceResolve = null; }
+}
+
+// ---- LOOP DETEKSI WAJAH ----
+async function runFaceDetection() {
+  if (!faceApiReady) {
+    document.getElementById('faceLoadBar').style.display = 'block';
+    setFacePill('scanning','Memuat model AI...',0);
+    const ok = await ensureFaceModels();
+    document.getElementById('faceLoadBar').style.display = 'none';
+    if (!ok) { setFacePill('fail','Gagal memuat model. Cek koneksi internet.',0); return; }
+  }
+
+  const video    = document.getElementById('faceVideo');
+  const canvas   = document.getElementById('faceCanvas');
+  const stored   = faceMode !== 'register' ? getFaceDescriptor(user?.id) : null;
+
+  const loop = async () => {
+    if (!faceStream) return;
+    try {
+      const det = await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({inputSize:320}))
+        .withFaceLandmarks(true)
+        .withFaceDescriptor();
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      if (!det) {
+        setFacePill('scanning','⚠️ Arahkan wajah ke kamera...',0);
+        document.getElementById('faceBtnOk').disabled = true;
+        faceLoopTimer = setTimeout(loop, 350); return;
+      }
+
+      // Cek kualitas: brightness
+      const sx = canvas.width  / video.videoWidth;
+      const sy = canvas.height / video.videoHeight;
+      const b  = det.detection.box;
+      const bx = b.x*sx, by = b.y*sy, bw = b.width*sx, bh = b.height*sy;
+
+      // Deteksi brightness dari area wajah
+      const imgData = ctx.getImageData(bx, by, Math.max(bw,1), Math.max(bh,1));
+      let brightness = 0;
+      // Gunakan video frame langsung
+      const offC = document.createElement('canvas');
+      offC.width = Math.max(Math.round(bw),1); offC.height = Math.max(Math.round(bh),1);
+      offC.getContext('2d').drawImage(video, b.x, b.y, b.width, b.height, 0, 0, offC.width, offC.height);
+      const pix = offC.getContext('2d').getImageData(0,0,offC.width,offC.height).data;
+      let total = 0;
+      for (let i=0; i<pix.length; i+=4) total += (pix[i]*0.299 + pix[i+1]*0.587 + pix[i+2]*0.114);
+      brightness = total / (pix.length/4);
+
+      // Deteksi jarak (ukuran box relatif terhadap layar)
+      const faceRatio = (bw * bh) / (canvas.width * canvas.height);
+
+      // Deteksi kemiringan dari landmark
+      const lm = det.landmarks.positions;
+      const leftEye  = lm[36]; // pojok kiri mata kiri
+      const rightEye = lm[45]; // pojok kanan mata kanan
+      const eyeAngle = Math.abs(Math.atan2((rightEye.y - leftEye.y)*sy, (rightEye.x - leftEye.x)*sx) * 180 / Math.PI);
+
+      // Validasi kondisi
+      if (brightness < 40) {
+        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setFacePill('warn','💡 Kurang cahaya — cari tempat lebih terang',0);
+        document.getElementById('faceBtnOk').disabled = true;
+        faceLoopTimer = setTimeout(loop, 350); return;
+      }
+      if (faceRatio < 0.06) {
+        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setFacePill('warn','↔ Terlalu jauh — dekatkan wajah ke kamera',0);
+        document.getElementById('faceBtnOk').disabled = true;
+        faceLoopTimer = setTimeout(loop, 350); return;
+      }
+      if (faceRatio > 0.65) {
+        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setFacePill('warn','↕ Terlalu dekat — jauhkan sedikit dari kamera',0);
+        document.getElementById('faceBtnOk').disabled = true;
+        faceLoopTimer = setTimeout(loop, 350); return;
+      }
+      if (eyeAngle > 15) {
+        drawFaceBox(ctx, bx, by, bw, bh, '#f59e0b');
+        setFacePill('warn','🔄 Wajah miring — hadapkan lurus ke kamera',0);
+        document.getElementById('faceBtnOk').disabled = true;
+        faceLoopTimer = setTimeout(loop, 350); return;
+      }
+
+      // Semua kondisi OK
+      if (faceMode === 'register') {
+        drawFaceBox(ctx, bx, by, bw, bh, '#4ade80');
+        const conf = Math.round(det.detection.score * 100);
+        setFacePill('ok','✓ Wajah terdeteksi (' + conf + '%)', conf);
+        document.getElementById('faceBtnOk').disabled = conf < 65;
+        pendingDesc = det.descriptor;
+      } else {
+        if (!stored) {
+          drawFaceBox(ctx, bx, by, bw, bh, '#f87171');
+          setFacePill('fail','Data wajah tidak ditemukan. Hubungi admin.',0);
+          document.getElementById('faceBtnOk').disabled = true;
+        } else {
+          const dist    = faceapi.euclideanDistance(det.descriptor, stored);
+          const matched = dist <= FACE_THRESHOLD;
+          const conf    = Math.round(Math.max(0,(1 - dist/FACE_THRESHOLD)) * 100);
+          drawFaceBox(ctx, bx, by, bw, bh, matched ? '#4ade80' : '#f87171');
+          if (matched) {
+            setFacePill('ok','✓ Wajah cocok (' + conf + '%)', conf);
+            document.getElementById('faceBtnOk').disabled = conf < 55;
+          } else {
+            setFacePill('fail','✗ Wajah tidak cocok (' + conf + '%)', conf);
+            document.getElementById('faceBtnOk').disabled = true;
+          }
+        }
+      }
+    } catch(e) { /* skip frame error */ }
+    faceLoopTimer = setTimeout(loop, 350);
+  };
+  setFacePill('scanning','Mendeteksi wajah...',0);
+  loop();
+}
+
+function drawFaceBox(ctx, x, y, w, h, color) {
+  ctx.strokeStyle = color; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,8); ctx.stroke();
+  ctx.globalAlpha = 0.1; ctx.fillStyle = color;
+  ctx.fillRect(x,y,w,h); ctx.globalAlpha = 1;
+}
+
+function setFacePill(type, text, conf) {
+  const pill = document.getElementById('facePill');
+  const dot  = document.getElementById('facePillDot');
+  const bar  = document.getElementById('faceConfBar');
+  document.getElementById('facePillText').textContent = text;
+  pill.className = 'face-pill ' + type;
+  const colors = { scanning:'#ffffff', ok:'#4ade80', warn:'#fcd34d', fail:'#f87171' };
+  dot.style.background  = colors[type] || '#fff';
+  dot.style.animation   = type === 'scanning' ? 'spin .8s linear infinite' : 'none';
+  bar.style.width       = conf + '%';
+  bar.style.background  = colors[type] || '#aaa';
+}
+
+// ================================================================
+// MODULE: CEK KEMARIN & LOCKED SCREEN
+// ================================================================
+let lockedTglKejadian = '';
+let approvalTimer     = null;
+
+async function cekKemarinDanKunci() {
+  if (!user) return;
+  try {
+    const res  = await fetch(API_URL + '?action=cekKemarin&id=' + encodeURIComponent(user.id) + '&offset=' + tzOffset);
+    const data = await res.json();
+    if (data.status === 'ok' && data.perluApproval) {
+      lockedTglKejadian = data.tglKejadian || '';
+      tampilkanLockedScreen(data);
+    }
+  } catch(e) { /* Offline — jangan blokir */ }
+}
+
+function tampilkanLockedScreen(data) {
+  const hariKosong  = data.hariKosong  || 1;
+  const alasanTipe  = data.alasanTipe  || 'alpha';
+  const tgl         = data.tglKejadian || '-';
+
+  let alertClass = 'merah', titleText = 'Aplikasi Terkunci', alertText = '', alertDate = '';
+
+  if (alasanTipe === 'lupa_co') {
+    alertText = 'Anda terdeteksi tidak melakukan check-out pada:';
+    alertDate = tgl;
+    titleText = 'Belum Check-out';
+  } else if (hariKosong === 1) {
+    alertText = 'Anda tidak melakukan absensi pada:';
+    alertDate = tgl;
+  } else if (hariKosong === 2) {
+    alertClass = 'kuning';
+    alertText  = '⚠️ Anda belum absen 2 hari berturut-turut. Mohon segera konfirmasi ke admin.';
+    alertDate  = 'Mulai dari: ' + tgl;
+    titleText  = 'Peringatan Absensi';
+    // Juga kirim push notif
+    kirimNotifMultiHari(hariKosong);
+  } else {
+    alertClass = 'kuning';
+    alertText  = '⚠️ Anda belum absen ' + hariKosong + ' hari. Mohon segera konfirmasi ke admin.';
+    alertDate  = 'Mulai dari: ' + tgl;
+    titleText  = 'Peringatan Absensi';
+    kirimNotifMultiHari(hariKosong);
+  }
+
+  document.getElementById('lockedTitle').textContent       = titleText;
+  document.getElementById('lockedSub').textContent         = 'Ajukan alasan untuk membuka aplikasi';
+  document.getElementById('lockedAlert').className         = 'locked-alert ' + alertClass;
+  document.getElementById('lockedAlertText').textContent   = alertText;
+  document.getElementById('lockedAlertDate').textContent   = alertDate;
+  document.getElementById('lockedFormWrap').style.display  = 'block';
+  document.getElementById('lockedSent').style.display      = 'none';
+  document.getElementById('lockedPoll').style.display      = 'none';
+  document.getElementById('lockedScreen').classList.remove('hidden');
+}
+
+async function kirimAlasan() {
+  const jenis = document.getElementById('lockedJenis').value;
+  const ket   = document.getElementById('lockedKet').value.trim();
+  if (!jenis) { showAlert('Pilih alasan terlebih dahulu','warning'); return; }
+
+  const alasan = jenis + (ket ? ' — ' + ket : '');
+  showLoading('Mengirim alasan...');
+  try {
+    const res = await fetch(API_URL, {
+      method:'POST',
+      body: JSON.stringify({ action:'ajukanAlasan', id:user.id, nama:user.nama, tglKejadian:lockedTglKejadian, alasan })
+    });
+    const data = await res.json();
+    hideLoading();
+    if (data.status === 'ok') {
+      document.getElementById('lockedFormWrap').style.display = 'none';
+      document.getElementById('lockedSent').style.display     = 'block';
+      document.getElementById('lockedPoll').style.display     = 'flex';
+      mulaiPollApproval();
+    } else { showAlert(data.message || 'Gagal mengirim','error'); }
+  } catch(e) { hideLoading(); showAlert('Gagal terhubung. Cek koneksi.','error'); }
+}
+
+function mulaiPollApproval() {
+  clearInterval(approvalTimer);
+  approvalTimer = setInterval(async () => {
+    try {
+      const res  = await fetch(API_URL + '?action=cekApproval&id=' + encodeURIComponent(user.id) + '&tgl=' + encodeURIComponent(lockedTglKejadian));
+      const data = await res.json();
+      if (data.approved) {
+        clearInterval(approvalTimer);
+        document.getElementById('lockedScreen').classList.add('hidden');
+        showAlert('✅ Akses dibuka oleh admin!','success');
+      } else if (data.ditolak) {
+        clearInterval(approvalTimer);
+        document.getElementById('lockedPoll').style.display = 'none';
+        document.getElementById('lockedSent').innerHTML     = '<div class="locked-sent-text" style="color:var(--red)">❌ Alasan ditolak admin. Hubungi supervisor Anda.</div>';
+        document.getElementById('lockedSent').style.display = 'block';
+      }
+    } catch(e) { /* skip */ }
+  }, 30000);
+}
+
+// ================================================================
+// MODULE: PUSH NOTIFICATION
+// ================================================================
+function requestPushPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission().then(p => { if (p==='granted') jadwalkanCekCO(); });
+  } else if (Notification.permission === 'granted') {
+    jadwalkanCekCO();
+  }
+}
+
+function jadwalkanCekCO() {
+  // Cek setiap menit apakah jam 17:00 dan belum CO
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 17 && now.getMinutes() === 0) {
+      if (!user || checkedOut || hasIzin) return;
+      tampilkanNotifCO('Anda belum check-out hari ini. Segera lakukan check-out sebelum hari berakhir.');
+    }
+  }, 60000);
+}
+
+function kirimNotifMultiHari(hari) {
+  if (Notification.permission !== 'granted') return;
+  const msg = hari === 2
+    ? 'Anda belum absen 2 hari berturut-turut. Mohon segera konfirmasi ke admin.'
+    : 'Anda belum absen ' + hari + ' hari. Akun Anda memerlukan konfirmasi admin segera.';
+  tampilkanNotifCO(msg);
+}
+
+function tampilkanNotifCO(body) {
+  if (Notification.permission !== 'granted') return;
+  navigator.serviceWorker.ready.then(reg => {
+    reg.showNotification('Absensi HOA — Pengingat', {
+      body,
+      icon: 'https://via.placeholder.com/192x192/0a3d62/ffffff?text=HOA',
+      badge:'https://via.placeholder.com/72x72/0a3d62/ffffff?text=HOA',
+      tag: 'hoa-reminder',
+      requireInteraction: true
+    });
+  }).catch(() => {
+    // Fallback jika SW belum ready
+    new Notification('Absensi HOA — Pengingat', { body, icon:'https://via.placeholder.com/192x192/0a3d62/ffffff?text=HOA' });
+  });
+}
+
 </script>
 </body>
 </html>
