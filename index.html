@@ -1013,7 +1013,7 @@ document.addEventListener('keydown', e => {
 // MODULE: FACE API - Verifikasi & Pendaftaran Wajah
 // ================================================================
 const FACE_MODEL_URL = 'weights';
-const FACE_THRESHOLD = 0.55;   // jarak max euclidean
+const FACE_THRESHOLD = 0.65;   // jarak max euclidean
 const FACE_STORAGE   = 'hoa_face';
 const MAX_ATTEMPTS   = 3;
 
@@ -1322,7 +1322,7 @@ async function runFaceDetection() {
           setGuideRingColor(matched ? '#4ade80' : '#f87171');
           if (matched) {
             setFacePill('ok','✓ Wajah cocok (' + conf + '%)', conf);
-            document.getElementById('faceBtnOk').disabled = conf < 70;
+            document.getElementById('faceBtnOk').disabled = conf < 50;
           } else {
             setFacePill('fail','✗ Wajah tidak cocok (' + conf + '%)', conf);
             document.getElementById('faceBtnOk').disabled = true;
