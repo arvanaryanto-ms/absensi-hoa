@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0a3d62">
 <title>Absensi HOA</title>
 <link rel="manifest" href="manifest.json">
-<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script defer src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -1025,7 +1025,12 @@ document.addEventListener('keydown', e => {
 // ================================================================
 // MODULE: FACE API - Verifikasi & Pendaftaran Wajah
 // ================================================================
-const FACE_MODEL_URL = 'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights';
+const FACE_MODEL_URL = (function() {
+  // Coba dari repo sendiri dulu, fallback ke CDN
+  return window.location.hostname === 'localhost' || window.location.protocol === 'file:'
+    ? 'https://unpkg.com/face-api.js@0.22.2/weights'
+    : (window.location.pathname.split('/').slice(0,2).join('/') + '/weights');
+})();
 const FACE_THRESHOLD = 0.50;   // jarak max euclidean
 const FACE_STORAGE   = 'hoa_face';
 const MAX_ATTEMPTS   = 3;
@@ -1104,7 +1109,7 @@ async function startFaceRegister() {
     btn.textContent = '📷 Buka Kamera & Daftarkan';
     btn.disabled = false;
     if (!ok) {
-      errEl.textContent = 'Gagal memuat model AI. Pastikan koneksi internet aktif lalu coba lagi.';
+      errEl.textContent = 'Gagal memuat model AI. Coba tutup & buka app kembali, atau coba beberapa saat lagi.';
       errEl.classList.add('show');
       return;
     }
