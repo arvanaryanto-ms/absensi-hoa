@@ -1473,32 +1473,18 @@ function tampilkanNotifCO(body) {
 </script>
 
 
+
 <script>
-// Load face-api via fetch+blob URL (bypass CSP script-src restriction)
-(function loadFaceApi() {
-  var url = 'https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js';
-  fetch(url)
-    .then(function(r) { return r.blob(); })
-    .then(function(blob) {
-      var blobUrl = URL.createObjectURL(blob);
-      var s = document.createElement('script');
-      s.src = blobUrl;
-      s.onload = function() {
-        URL.revokeObjectURL(blobUrl);
-        window._faceApiLoaded = true;
-        console.log('face-api OK:', typeof faceapi);
-      };
-      s.onerror = function() {
-        console.error('face-api gagal load');
-        window._faceApiLoadFailed = true;
-      };
-      document.head.appendChild(s);
-    })
-    .catch(function(e) {
-      console.error('fetch face-api gagal:', e);
-      window._faceApiLoadFailed = true;
-    });
-})();
+window._faceApiReady = false;
+fetch('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js')
+  .then(function(r){ return r.text(); })
+  .then(function(code){
+    var fn = new Function(code);
+    fn();
+    window._faceApiReady = true;
+    console.log('face-api OK via eval:', typeof faceapi);
+  })
+  .catch(function(e){ console.error('face-api load error:', e); });
 </script>
 </body>
 </html>
