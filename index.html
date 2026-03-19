@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0a3d62">
 <title>Absensi HOA</title>
 <link rel="manifest" href="manifest.json">
-<script defer src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script src="face-api.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -540,45 +540,15 @@ function getDeviceId() {
 }
 
 window.addEventListener('load', async () => {
+  // Setiap buka app selalu clear session — harus login ulang dengan ID+PIN+wajah
+  localStorage.removeItem('hoa_user');
+  user = null;
+
   updateClock();
   setInterval(updateClock, 1000);
   setDefaultDate();
   registerSW();
-  preloadFaceModels(); // Mulai load model di background
-
-  const saved = localStorage.getItem('hoa_user');
-  if (saved) {
-    user = JSON.parse(saved);
-    // Selalu ambil Face Data langsung dari Sheets (sumber utama)
-    try {
-      const res  = await fetch(API_URL + '?action=ambilWajah&id=' + encodeURIComponent(user.id));
-      const data = await res.json();
-      if (data.status === 'ok' && data.hasFaceData && data.faceData) {
-        // Update localStorage dari Sheets agar selalu sinkron
-        const store = JSON.parse(localStorage.getItem('hoa_face') || '{}');
-        store[user.id] = data.faceData;
-        localStorage.setItem('hoa_face', JSON.stringify(store));
-        // Verifikasi wajah
-        const ok = await openFaceVerify('login');
-        if (!ok) { user = null; localStorage.removeItem('hoa_user'); return; }
-        initApp();
-      } else {
-        // Belum ada di Sheets — paksa daftar wajah
-        showFaceRegScreen();
-      }
-    } catch(e) {
-      // Offline — fallback ke localStorage jika ada
-      const faceDesc = getFaceDescriptor(user.id);
-      if (faceDesc) {
-        const ok = await openFaceVerify('login');
-        if (!ok) { user = null; localStorage.removeItem('hoa_user'); return; }
-        initApp();
-      } else {
-        // Offline & tidak ada data lokal — masuk tanpa verifikasi
-        initApp();
-      }
-    }
-  }
+  preloadFaceModels(); // Load model di background saat login screen tampil
 });
 
 function registerSW() {
@@ -651,7 +621,7 @@ async function doLogin() {
     hideLoading();
     if (res.status === 'ok') {
       user = res.user;
-      localStorage.setItem('hoa_user', JSON.stringify(user));
+      // Tidak simpan ke localStorage — harus login ulang setiap buka app
       // Simpan faceData dari server ke localStorage jika ada
       if (res.faceData) {
         const store = JSON.parse(localStorage.getItem('hoa_face') || '{}');
@@ -665,7 +635,6 @@ async function doLogin() {
         const ok = await openFaceVerify('login');
         if (!ok) {
           user = null;
-          localStorage.removeItem('hoa_user');
           showLoginError('Verifikasi wajah gagal. Coba lagi.');
           return;
         }
@@ -945,7 +914,7 @@ async function loadHistory() {
 
 function doLogout() {
   if (!confirm('Yakin ingin keluar dari akun '+user.nama+'?')) return;
-  localStorage.removeItem('hoa_user');
+  user = null;
   location.reload();
 }
 
@@ -1025,12 +994,7 @@ document.addEventListener('keydown', e => {
 // ================================================================
 // MODULE: FACE API - Verifikasi & Pendaftaran Wajah
 // ================================================================
-const FACE_MODEL_URL = (function() {
-  // Coba dari repo sendiri dulu, fallback ke CDN
-  return window.location.hostname === 'localhost' || window.location.protocol === 'file:'
-    ? 'https://unpkg.com/face-api.js@0.22.2/weights'
-    : (window.location.pathname.split('/').slice(0,2).join('/') + '/weights');
-})();
+const FACE_MODEL_URL = 'weights';
 const FACE_THRESHOLD = 0.50;   // jarak max euclidean
 const FACE_STORAGE   = 'hoa_face';
 const MAX_ATTEMPTS   = 3;
