@@ -1,4 +1,4 @@
-const CACHE = 'absensi-hoa-v3';
+const CACHE = 'absensi-hoa-v4';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
@@ -21,7 +21,7 @@ self.addEventListener('activate', e => {
 function jadwalkanNotifCO() {
   const now = new Date();
   const target = new Date();
-  target.setHours(17, 25, 0, 0);
+  target.setHours(17, 40, 0, 0);
 
   // Kalau sudah lewat jam 17 hari ini, jadwalkan besok
   if (now >= target) {
