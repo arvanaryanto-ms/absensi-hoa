@@ -728,8 +728,10 @@ function startGPS() {
 }
 
 function isMockLocation(pos) {
-  if (pos.coords.accuracy !== undefined && pos.coords.accuracy < 2) return true;
-  if (pos.coords.altitudeAccuracy === 0) return true;
+  // Hanya blok kalau property mock benar-benar ada dan bernilai true
+  // (Android 6+ set property ini saat fake GPS aktif)
+  if (pos.coords.mock === true) return true;
+  // Kecepatan negatif tidak mungkin terjadi di GPS asli
   if (typeof pos.coords.speed === 'number' && pos.coords.speed < 0) return true;
   return false;
 }
@@ -1013,7 +1015,7 @@ document.addEventListener('keydown', e => {
 // MODULE: FACE API - Verifikasi & Pendaftaran Wajah
 // ================================================================
 const FACE_MODEL_URL = 'weights';
-const FACE_THRESHOLD = 0.65;   // jarak max euclidean
+const FACE_THRESHOLD = 0.55;   // jarak max euclidean
 const FACE_STORAGE   = 'hoa_face';
 const MAX_ATTEMPTS   = 3;
 
@@ -1322,7 +1324,7 @@ async function runFaceDetection() {
           setGuideRingColor(matched ? '#4ade80' : '#f87171');
           if (matched) {
             setFacePill('ok','✓ Wajah cocok (' + conf + '%)', conf);
-            document.getElementById('faceBtnOk').disabled = conf < 50;
+            document.getElementById('faceBtnOk').disabled = conf < 70;
           } else {
             setFacePill('fail','✗ Wajah tidak cocok (' + conf + '%)', conf);
             document.getElementById('faceBtnOk').disabled = true;
@@ -1473,17 +1475,33 @@ function requestPushPermission() {
   } else if (Notification.permission === 'granted') {
     jadwalkanCekCO();
   }
+
+  // Listener: SW tanya status checkout user
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data && e.data.type === 'CEK_CO_STATUS') {
+        e.ports[0].postMessage({ checkedOut: checkedOut || hasIzin });
+      }
+    });
+  }
 }
 
 function jadwalkanCekCO() {
-  // Cek setiap menit apakah jam 17:00 dan belum CO
+  let notifTerkirim = false;
+  // Cek setiap 10 detik agar tidak miss window jam 17:00
   setInterval(() => {
     const now = new Date();
-    if (now.getHours() === 17 && now.getMinutes() === 0) {
+    const jam = now.getHours();
+    const menit = now.getMinutes();
+    // Kirim notif antara 17:00 - 17:02 agar tidak miss
+    if (jam === 17 && menit <= 2 && !notifTerkirim) {
       if (!user || checkedOut || hasIzin) return;
-      tampilkanNotifCO('Anda belum check-out hari ini. Segera lakukan check-out sebelum hari berakhir.');
+      notifTerkirim = true;
+      tampilkanNotifCO('Jangan lupa Check-Out! Segera lakukan check-out sebelum hari berakhir. 🔔');
     }
-  }, 60000);
+    // Reset flag setiap hari baru
+    if (jam === 0 && menit === 0) notifTerkirim = false;
+  }, 10000);
 }
 
 function kirimNotifMultiHari(hari) {
