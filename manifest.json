@@ -5,20 +5,20 @@
   "start_url": "/absensi-hoa/index.html",
   "scope": "/absensi-hoa/",
   "display": "standalone",
-  "background_color": "#0a3d62",
-  "theme_color": "#0a3d62",
+  "background_color": "#4BAEE8",
+  "theme_color": "#4BAEE8",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192x192/0a3d62/ffffff?text=HOA",
+      "src": "icon-192.svg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "https://via.placeholder.com/512x512/0a3d62/ffffff?text=HOA",
+      "src": "icon-512.svg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]

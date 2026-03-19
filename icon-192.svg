@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="40" fill="#4BAEE8"/>
+  <ellipse cx="96" cy="130" rx="45" ry="36" fill="#fff"/>
+  <circle cx="96" cy="78" r="34" fill="#fff"/>
+  <path d="M78 52 Q72 36 80 28" stroke="#F5C842" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M114 52 Q120 36 112 28" stroke="#F5C842" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="64" cy="77" rx="11" ry="8" fill="#F9A8C0" transform="rotate(-20,64,77)"/>
+  <ellipse cx="128" cy="77" rx="11" ry="8" fill="#F9A8C0" transform="rotate(20,128,77)"/>
+  <ellipse cx="96" cy="96" rx="17" ry="12" fill="#F9A8C0"/>
+  <circle cx="90" cy="95" r="3" fill="#D47090"/>
+  <circle cx="102" cy="95" r="3" fill="#D47090"/>
+  <path d="M87 103 Q96 110 105 103" stroke="#D47090" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="80" cy="70" r="8" fill="#333"/>
+  <circle cx="83" cy="68" r="2.5" fill="#fff"/>
+  <line x1="74" y1="62" x2="72" y2="58" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="78" y1="61" x2="77" y2="57" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="82" y1="61" x2="83" y2="57" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="112" cy="70" r="8" fill="#333"/>
+  <circle cx="115" cy="68" r="2.5" fill="#fff"/>
+  <line x1="106" y1="62" x2="104" y2="58" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="110" y1="61" x2="109" y2="57" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="114" y1="61" x2="115" y2="57" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+  <ellipse cx="82" cy="122" rx="11" ry="9" fill="#D0ECF8"/>
+  <ellipse cx="112" cy="135" rx="9" ry="7" fill="#D0ECF8"/>
+  <rect x="68" y="157" width="11" height="18" rx="5" fill="#fff"/>
+  <rect x="84" y="157" width="11" height="18" rx="5" fill="#fff"/>
+  <rect x="100" y="157" width="11" height="18" rx="5" fill="#fff"/>
+  <rect x="116" y="157" width="11" height="18" rx="5" fill="#fff"/>
+  <path d="M141 125 Q152 115 148 138" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="148" cy="141" r="5" fill="#F9A8C0"/>
+  <text x="96" y="184" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="14" fill="#fff" letter-spacing="2">CIMORY</text>
+</svg>
