@@ -510,7 +510,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbxryS0zfJ2eCL331SgTPJRWmo3tSd9BPuTNSKALBb-ZGA6cw5LvE_gvj_w2DHmJ082Y_w/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzBhbpEn6Vv7DGEL1JIi14ew4l08aUlFQMufa3iTNhDID9mYN93MIf1Fetk-Su5cvdwdg/exec';
 
 let user = null;
 let gpsLat = null, gpsLng = null, gpsAcc = null;
@@ -539,13 +539,46 @@ function getDeviceId() {
   return did;
 }
 
-window.addEventListener('load', () => {
-  const saved = localStorage.getItem('hoa_user');
-  if (saved) { user = JSON.parse(saved); initApp(); }
+window.addEventListener('load', async () => {
   updateClock();
   setInterval(updateClock, 1000);
   setDefaultDate();
   registerSW();
+  preloadFaceModels(); // Mulai load model di background
+
+  const saved = localStorage.getItem('hoa_user');
+  if (saved) {
+    user = JSON.parse(saved);
+    // Selalu ambil Face Data langsung dari Sheets (sumber utama)
+    try {
+      const res  = await fetch(API_URL + '?action=ambilWajah&id=' + encodeURIComponent(user.id));
+      const data = await res.json();
+      if (data.status === 'ok' && data.hasFaceData && data.faceData) {
+        // Update localStorage dari Sheets agar selalu sinkron
+        const store = JSON.parse(localStorage.getItem('hoa_face') || '{}');
+        store[user.id] = data.faceData;
+        localStorage.setItem('hoa_face', JSON.stringify(store));
+        // Verifikasi wajah
+        const ok = await openFaceVerify('login');
+        if (!ok) { user = null; localStorage.removeItem('hoa_user'); return; }
+        initApp();
+      } else {
+        // Belum ada di Sheets — paksa daftar wajah
+        showFaceRegScreen();
+      }
+    } catch(e) {
+      // Offline — fallback ke localStorage jika ada
+      const faceDesc = getFaceDescriptor(user.id);
+      if (faceDesc) {
+        const ok = await openFaceVerify('login');
+        if (!ok) { user = null; localStorage.removeItem('hoa_user'); return; }
+        initApp();
+      } else {
+        // Offline & tidak ada data lokal — masuk tanpa verifikasi
+        initApp();
+      }
+    }
+  }
 });
 
 function registerSW() {
@@ -1060,16 +1093,46 @@ function showFaceRegScreen() {
 
 async function startFaceRegister() {
   const errEl = document.getElementById('faceRegError');
+  const btn   = document.querySelector('#faceRegScreen .login-btn');
   errEl.classList.remove('show');
-  const ok = await openFaceVerify('register');
-  if (ok && pendingDesc && user) {
+
+  // Pastikan model sudah siap sebelum buka kamera
+  if (!faceApiReady) {
+    btn.textContent = '⏳ Memuat model AI...';
+    btn.disabled = true;
+    const ok = await ensureFaceModels();
+    btn.textContent = '📷 Buka Kamera & Daftarkan';
+    btn.disabled = false;
+    if (!ok) {
+      errEl.textContent = 'Gagal memuat model AI. Pastikan koneksi internet aktif lalu coba lagi.';
+      errEl.classList.add('show');
+      return;
+    }
+  }
+
+  // Cek izin kamera dulu
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'user' }, audio:false });
+    stream.getTracks().forEach(t => t.stop()); // stop test stream
+  } catch(e) {
+    errEl.textContent = 'Akses kamera ditolak. Izinkan kamera di pengaturan browser lalu coba lagi.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  const result = await openFaceVerify('register');
+  if (result && pendingDesc && user) {
+    btn.textContent = '⏳ Menyimpan data wajah...';
+    btn.disabled = true;
     await saveFaceDescriptor(user.id, pendingDesc);
     pendingDesc = null;
+    btn.textContent = '📷 Buka Kamera & Daftarkan';
+    btn.disabled = false;
     document.getElementById('faceRegScreen').classList.add('hidden');
     showAlert('Wajah berhasil didaftarkan! ✅','success');
     initApp();
-  } else if (!ok) {
-    errEl.textContent = 'Pendaftaran dibatalkan. Coba lagi.';
+  } else {
+    errEl.textContent = 'Pendaftaran dibatalkan atau gagal. Coba lagi.';
     errEl.classList.add('show');
   }
 }
